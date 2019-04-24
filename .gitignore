@@ -21,3 +21,4 @@ configtool.ini
 *.atsuo
 *.componentinfo.xml
 *.cproj
+.vscode/settings.json
