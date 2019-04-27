@@ -46,8 +46,8 @@ class ConfigFrame(wx.Frame):
         panel.Bind(wx.EVT_PAINT, self.deco.onPaintBackground)
         self.settings = settings
         self.settings.app = self
-        self.settings.font = wx.Font(8, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL,
-                                     wx.FONTWEIGHT_BOLD)
+        self.settings.font = wx.Font(8, wx.FONTFAMILY_SWISS,
+                                     wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD)
         self.heaters = []
         self.savePrtEna = False
         self.saveBrdEna = False
@@ -121,7 +121,8 @@ class ConfigFrame(wx.Frame):
     def makeMenu(self):
         file_menu = wx.Menu()
         file_menu.Append(ID_LOAD_CONFIG, "Load config.h",
-                         "Load config.h and its named printer and board files.")
+                         "Load config.h and its named printer \
+                         and board files.")
         self.Bind(wx.EVT_MENU, self.onLoadConfig, id=ID_LOAD_CONFIG)
         file_menu.Enable(ID_LOAD_CONFIG, False)
         file_menu.Append(ID_SAVE_CONFIG, "Save config.h",
@@ -257,19 +258,25 @@ class ConfigFrame(wx.Frame):
         self.loadConfigFile("config.h")
 
     def loadConfigFile(self, fn):
-        if not self.pgPrinter.confirmLoseChanges("load config"):
+        if not self.pgPrinter.confirmLoseChanges(
+                "load config"):
             return False
-        if not self.pgBoard.confirmLoseChanges("load config"):
+        if not self.pgBoard.confirmLoseChanges(
+                "load config"):
             return False
         pfile, bfile = self.getConfigFileNames(fn)
         if not pfile:
-            self.message("Config file did not contain a printer file "
-                         "include statement.", "Config error")
+            self.message(
+                "Config file did not contain a printer file "
+                "include statement.", "Config error"
+            )
             return False
         else:
             if not self.pgPrinter.loadConfigFile(pfile):
-                self.message("There was a problem loading the printer config file:\n%s"
-                             % pfile, "Config error")
+                self.message(
+                    "There was a problem loading the printer config "
+                    "file: \n % s" % pfile, "Config error"
+                )
                 return False
         if not bfile:
             self.message("Config file did not contain a board file "
@@ -277,8 +284,8 @@ class ConfigFrame(wx.Frame):
             return False
         else:
             if not self.pgBoard.loadConfigFile(bfile):
-                self.message("There was a problem loading the board config file:\n%s"
-                             % bfile, "Config error")
+                self.message("There was a problem loading the board config "
+                             "file: \n % s" % bfile, "Config error")
                 return False
         return True
 
@@ -301,21 +308,23 @@ class ConfigFrame(wx.Frame):
                 if len(t) == 1:
                     if "printer." in t[0]:
                         if pfile:
-                            self.message("Multiple printer file include statements.\n"
-                                         "Ignoring %s." % ln, "Config error",
-                                         wx.OK + wx.ICON_WARNING)
+                            self.message("Multiple printer file include "
+                                         "statements.\n" "Ignoring % s." % ln,
+                                         "Config error", wx.OK +
+                                         wx.ICON_WARNING)
                         else:
                             pfile = os.path.join(self.settings.folder, t[0])
                     elif "board." in t[0]:
                         if bfile:
-                            self.message("Multiple board file include statements.\n"
-                                         "Ignoring %s." % ln, "Config error",
+                            self.message("Multiple board file include "
+                                         "statements.\n" "Ignoring % s." % ln,
+                                         "Config error",
                                          wx.OK + wx.ICON_WARNING)
                         else:
                             bfile = os.path.join(self.settings.folder, t[0])
                     else:
-                        self.message("Unable to parse include statement:\n%s" % ln,
-                                     "Config error")
+                        self.message("Unable to parse include statement:\n%s"
+                                     % ln, "Config error")
         return pfile, bfile
 
     def onSaveConfig(self, evt):
@@ -366,7 +375,8 @@ class ConfigFrame(wx.Frame):
             dlg = wx.MessageDialog(self, "Data needs to be loaded. "
                                          "Click Yes to load config.h.",
                                    "Data missing",
-                                   wx.YES_NO | wx.NO_DEFAULT | wx.ICON_INFORMATION)
+                                   wx.YES_NO | wx.NO_DEFAULT |
+                                   wx.ICON_INFORMATION)
             rc = dlg.ShowModal()
             dlg.Destroy()
             if rc != wx.ID_YES:
@@ -374,10 +384,12 @@ class ConfigFrame(wx.Frame):
             self.loadConfigFile("config.h")
         else:
             if self.pgPrinter.isModified():
-                dlg = wx.MessageDialog(self, "Printer data needs to be saved. Click "
-                                             "Yes to save printer configuration.",
-                                       "Changes pending",
-                                       wx.YES_NO | wx.NO_DEFAULT | wx.ICON_INFORMATION)
+                dlg = wx.MessageDialog(
+                    self,
+                    "Printer data needs to be saved. Click"
+                    "Yes to save printer configuration.",
+                    "Changes pending",
+                    wx.YES_NO | wx.NO_DEFAULT | wx.ICON_INFORMATION)
                 rc = dlg.ShowModal()
                 dlg.Destroy()
                 if rc != wx.ID_YES:
@@ -389,10 +401,12 @@ class ConfigFrame(wx.Frame):
                 if not rc:
                     return
             if self.pgBoard.isModified():
-                dlg = wx.MessageDialog(self, "Board data needs to be saved. Click "
-                                             "Yes to save board configuration.",
-                                       "Changes pending",
-                                       wx.YES_NO | wx.NO_DEFAULT | wx.ICON_INFORMATION)
+                dlg = wx.MessageDialog(
+                    self,
+                    "Board data needs to be saved. Click "
+                    "Yes to save board configuration.",
+                    "Changes pending",
+                    wx.YES_NO | wx.NO_DEFAULT | wx.ICON_INFORMATION)
                 rc = dlg.ShowModal()
                 dlg.Destroy()
                 if rc != wx.ID_YES:
@@ -404,10 +418,12 @@ class ConfigFrame(wx.Frame):
                 if not rc:
                     return
         if not self.verifyConfigLoaded():
-            dlg = wx.MessageDialog(self, "Loaded configuration does not match the "
-                                         "config.h file. Click Yes to save config.h.",
-                                   "Configuration changed",
-                                   wx.YES_NO | wx.NO_DEFAULT | wx.ICON_INFORMATION)
+            dlg = wx.MessageDialog(
+                self,
+                "Loaded configuration does not match "
+                "the config.h file. Click Yes to save config.h.",
+                "Configuration changed",
+                wx.YES_NO | wx.NO_DEFAULT | wx.ICON_INFORMATION)
             rc = dlg.ShowModal()
             dlg.Destroy()
             if rc != wx.ID_YES:
@@ -416,14 +432,19 @@ class ConfigFrame(wx.Frame):
                 return
         f_cpu, cpu = self.pgBoard.getCPUInfo()
         if not cpu:
-            dlg = wx.MessageDialog(self, "Unable to determine CPU type.",
-                                   "CPU type error", wx.OK | wx.ICON_ERROR)
+            dlg = wx.MessageDialog(
+                self,
+                "Unable to determine CPU type.",
+                "CPU type error", wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
             dlg.Destroy()
             return
         if not f_cpu:
-            dlg = wx.MessageDialog(self, "Unable to determine CPU clock rate.",
-                                   "CPU clock rate error", wx.OK | wx.ICON_ERROR)
+            dlg = wx.MessageDialog(
+                self,
+                "Unable to determine CPU clock rate.",
+                "CPU clock rate error",
+                wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
             dlg.Destroy()
             return
@@ -458,12 +479,14 @@ class ConfigFrame(wx.Frame):
         import webbrowser
         import subprocess
         from sys import platform
-        # Testing allowed URLs up to 32 kB in size. Longer URLs are simply chopped.
+        # Testing allowed URLs up to 32 kB in size.
+        # Longer URLs are simply chopped.
         mailRecipients = "reply+0004dc756da9f0641af0a3834c580ad5be469f4f6b" \
             "5d4cfc92cf00000001118c958a92a169ce051faa8c@" \
             "reply.github.com,mah@jump-ing.de"
         mailSubject = "Teacup problem report"
-        mailBody = "Please answer these questions before hitting \"send\":\n\n" \
+        mailBody = "Please answer these questions before hitting" \
+            "send\":\n\n" \
                    "What did you try to do?\n\n\n" \
                    "What did you expect to happen?\n\n\n" \
                    "What happened instead?\n\n\n\n" \
@@ -485,16 +508,16 @@ class ConfigFrame(wx.Frame):
         url = "mailto:" + urllib.quote(mailRecipients) + \
               "?subject=" + urllib.quote(mailSubject) + \
               "&body=" + urllib.quote(mailBody)
-        # This is a work around a bug in gvfs-open coming with (at least) Ubuntu
-        # 15.04. gvfs-open would open mailto:///user@example.com instead of
-        # the requested mailto:user@example.com.
+        # This is a work around a bug in gvfs-open coming with (at least)
+        # Ubuntu  15.04. gvfs-open would open mailto:///user@example.com
+        # instead of the requested mailto:user@example.com.
         if platform.startswith("linux"):
             try:
                 subprocess.check_output(["gvfs-open", "--help"])
                 # Broken gvfs-open exists, so it might be used.
                 # Try to open the URL directly.
-                for urlOpener in "thunderbird", "evolution", "firefox", "mozilla", \
-                                 "epiphany", "konqueror", "chromium-browser", \
+                for urlOpener in "thunderbird", "evolution", "firefox", \
+                    "mozilla", "epiphany", "konqueror", "chromium-browser", \
                                  "google-chrome":
                     try:
                         subprocess.check_output(
@@ -510,11 +533,12 @@ class ConfigFrame(wx.Frame):
         # Get the contributors' top 10 with something like this:
         #   export B=experimental
         #   git log $B | grep "Author:" | sort | uniq | while \
-        #     read A; do N=$(git log $B | grep "$A" | wc -l); echo "$N $A"; done | \
-        #     sort -rn
-        self.message("Teacup Firmware is a 3D Printer and CNC machine controlling "
-                     "firmware with emphasis on performance, efficiency and "
-                     "outstanding quality. What Teacup does, shall it do very well."
+        #     read A; do N=$(git log $B | grep "$A" | wc -l);
+        # echo "$N $A"; done | \ sort -rn
+        self.message("Teacup Firmware is a 3D Printer and CNC machine "
+                     "controlling  firmware with emphasis on performance, "
+                     "efficiency and outstanding quality.What Teacup does, "
+                     "shall it do very well."
                      "\n\n\n"
                      "Lots of people hard at work! Top 10 contributors:\n\n"
                      "    Markus Hitter (542 commits)\n"

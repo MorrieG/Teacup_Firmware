@@ -51,9 +51,12 @@ class Settings:
                 return False
         else:
             if not self.cfg.read(self.inifile):
-                if not self.cfg.read(os.path.join(self.folder, DEFAULT_INIFILE)):
-                    print("Neither of settings files %s or %s exist. Using default values."
-                          % (INIFILE, DEFAULT_INIFILE))
+                if not self.cfg.read(os.path.join(
+                        self.folder, DEFAULT_INIFILE)):
+                    print(
+                        "Neither of settings files %s or %s exist. "
+                        "Using default values."
+                        % (INIFILE, DEFAULT_INIFILE))
                     return False
         if self.cfg.has_section(self.section):
             for opt, value in self.cfg.items(self.section):
@@ -114,13 +117,13 @@ class Settings:
         self.section = "configtool"
         try:
             self.cfg.add_section(self.section)
-        except ConfigParser.DuplicateSectionError:
+        except configparser.DuplicateSectionError:
             pass
         values = self.getValues()
         for k in values.keys():
             self.cfg.set(self.section, k, values[k])
         try:
-            cfp = open(inifile, 'wb')
+            cfp = open(inifile, 'w')
         except:
             print("Unable to open settings file %s for writing." % inifile)
             return False
@@ -137,8 +140,8 @@ class SettingsDlg(wx.Dialog):
         self.settings = settings
         self.modified = False
         self.Bind(wx.EVT_CLOSE, self.onExit)
-        htArdDir = "Path to the Arduino IDE folder. Configtool will figure the " \
-            "details on where to find avr-gcc and avrdude inside there." \
+        htArdDir = "Path to the Arduino IDE folder. Configtool will figure " \
+            "the details on where to find avr-gcc and avrdude inside there." \
             "\n\nIf empty, the system wide installed tools will be used."
         htCFlags = "Flags passed into the avr-gcc compiler. These flags can " \
             "have 3 different variables embedded within them:" \
@@ -154,33 +157,38 @@ class SettingsDlg(wx.Dialog):
         htObjCopy = "Flags passed to avr-objcopy."
         htProgrammer = "The programmer type - passed to avrdude."
         htProgramFlags = "Extra flags passed to avrdude."
-        htPort = "The port to which the controller is connected. Typically a " \
-            "path starting with /dev/... on Linux or Mac OS X, or some " \
+        htPort = "The port to which the controller is connected. Typically " \
+            "a path starting with /dev/... on Linux or Mac OS X, or some " \
             "COM... on Windows."
-        htSpeed = "The baud rate with which to communicate with the bootloader."
-        htNumTemps = "The number of entries generated for the thermistor tables. " \
-            "Higher numbers slightly increase temperature reading " \
+        htSpeed = "The baud rate with which to communicate with the " \
+            "bootloader."
+        htNumTemps = "The number of entries generated for the thermistor " \
+            "tables. Higher numbers slightly increase temperature reading " \
             "accuracy, but also cost binary size. Default is 25."
-        htMinAdc = "The minimum ADC value returned by the thermistor. Typically 0."
+        htMinAdc = "The minimum ADC value returned by the thermistor. " \
+            "Typically 0. "
         htMaxAdc = "The maximum ADC value returned by the thermistor. " \
             "Typically 1023 (maximum of 10-bit ADCs)."
-        htT0 = "The T0 value used for thermistor table calculation. Typically 25."
-        htR1 = "The R1 value used for thermistor table calculation. Typically 0."
+        htT0 = "The T0 value used for thermistor table calculation. " \
+            "Typically 25."
+        htR1 = "The R1 value used for thermistor table calculation. " \
+            "Typically 0."
         # This table MUST be in the same order as the constants defined at
         # the top of this file.
-        self.fields = [["Arduino Directory", settings.arduinodir, htArdDir],
-                       ["C Compiler Flags", settings.cflags, htCFlags],
-                       ["LD Flags", settings.ldflags, htLDFlags],
-                       ["Object Copy Flags", settings.objcopyflags, htObjCopy],
-                       ["AVR Programmer", settings.programmer, htProgrammer],
-                       ["AVR Upload Flags", settings.programflags, htProgramFlags],
-                       ["Port", settings.port, htPort],
-                       ["Upload Speed", settings.uploadspeed, htSpeed],
-                       ["Number of Temps", settings.numTemps, htNumTemps],
-                       ["Minimum ADC value", settings.minAdc, htMinAdc],
-                       ["Maximum ADC value", settings.maxAdc, htMaxAdc],
-                       ["T0", settings.t0, htT0],
-                       ["R1", settings.r1, htR1]]
+        self.fields = [
+            ["Arduino Directory", settings.arduinodir, htArdDir],
+            ["C Compiler Flags", settings.cflags, htCFlags],
+            ["LD Flags", settings.ldflags, htLDFlags],
+            ["Object Copy Flags", settings.objcopyflags, htObjCopy],
+            ["AVR Programmer", settings.programmer, htProgrammer],
+            ["AVR Upload Flags", settings.programflags, htProgramFlags],
+            ["Port", settings.port, htPort],
+            ["Upload Speed", settings.uploadspeed, htSpeed],
+            ["Number of Temps", settings.numTemps, htNumTemps],
+            ["Minimum ADC value", settings.minAdc, htMinAdc],
+            ["Maximum ADC value", settings.maxAdc, htMaxAdc],
+            ["T0", settings.t0, htT0],
+            ["R1", settings.r1, htR1]]
         self.teList = []
         hsz = wx.BoxSizer(wx.HORIZONTAL)
         hsz.Add((10, 10))
@@ -194,7 +202,7 @@ class SettingsDlg(wx.Dialog):
             t.SetFont(settings.font)
             lsz.Add(t, 1, wx.TOP, offsetTcLabel)
             lsz.Add((8, 8))
-            te = wx.TextCtrl(self, wx.ID_ANY, f[1], size=(600, -1))
+            te = wx.TextCtrl(self, wx.ID_ANY, str(f[1]), size=(600, -1))
             te.Bind(wx.EVT_TEXT, self.onTextCtrl)
             te.SetToolTip(f[2])
             lsz.Add(te)

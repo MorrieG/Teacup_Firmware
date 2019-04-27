@@ -22,7 +22,7 @@ class Printer:
         return dict(vars)
 
     def hasData(self):
-        return (self.configFile != None)
+        return (self.configFile is not None)
 
     def getFileName(self):
         return self.configFile
@@ -86,8 +86,8 @@ class Printer:
                 continue
             self.parseDefineName(ln)
             self.parseDefineValue(ln)
-        # Set all boolean generic configuration items to False, so items not yet
-        # existing in the user configuration default to disabled.
+        # Set all boolean generic configuration items to False, so items not
+        # yet existing in the user configuration default to disabled.
         for k in self.cfgValues.keys():
             if isinstance(self.cfgValues[k], bool):
                 self.cfgValues[k] = False
@@ -195,8 +195,9 @@ class Printer:
             # Booleans already existing as values are most likely misconfigured
             # manual edits (or result of a bug).
             if len(t) == 1 and t[0] in self.cfgNames \
-                and not (t[0] in self.cfgValues
-                         and isinstance(self.cfgValues[t[0]], tuple)):
+                and not (
+                    t[0] in self.cfgValues and isinstance(
+                        self.cfgValues[t[0]], tuple)):
                 if reDefBoolBL.search(ln):
                     self.cfgValues[t[0]] = True
                 else:
@@ -237,26 +238,29 @@ class Printer:
                 if len(t) == 2 and t[0] in values.keys():
                     v = values[t[0]]
                     self.cfgValues[t[0]] = v
-                    if v[1] == False:
+                    if v[1] is False:
                         fp.write("//")
                     fp.write(defineValueFormat % (t[0], v[0]))
                 else:
                     if t[0] == 'CANNED_CYCLE':
-                        # Known to be absent in the GUI. Worse, this value is replaced
-                        # by the one in the metadata file.
+                        # Known to be absent in the GUI. Worse, this value is
+                        # replaced by the one in the metadata file.
                         #
-                        # TODO: make value reading above recognize wether this value is
-                        #       commented out or not. Reading the value its self works
-                        #       already. Hint: it's the rule using reDefQS, reDefQSm, etc.
+                        # TODO: make value reading above recognize wether
+                        #       this value is commented out or not. Reading
+                        #       the value its self works already. Hint: it's
+                        #       the rule using reDefQS, reDefQSm, etc.
                         #
-                        # TODO: add a multiline text field in the GUI to deal with this.
+                        # TODO: add a multiline text field in the GUI to deal
+                        #       with this.
                         #
-                        # TODO: write this value out properly. In /* comments */, if
-                        #       disabled.
+                        # TODO: write this value out properly.
+                        #       In /* comments */, if disabled.
                         #
-                        # TODO: currently, the lines beyond the ones with the #define are
-                        #       treated like arbitrary comments. Having the former TODOs
-                        #       done, this will lead to duplicates.
+                        # TODO: currently, the lines beyond the ones with the
+                        #       #define are treated like arbitrary comments.
+                        #       Having the former TODOs done, this will lead
+                        #       to duplicates.
                         fp.write(ln)
                     else:
                         print("Value key " + t[0] + " not found in GUI.")
@@ -267,7 +271,7 @@ class Printer:
                 if len(t) == 1 and t[0] in values.keys():
                     v = values[t[0]]
                     self.cfgValues[t[0]] = v
-                    if v == "" or v == False:
+                    if v is "" or v is False:
                         fp.write("//")
                     fp.write(defineBoolFormat % t[0])
                 else:

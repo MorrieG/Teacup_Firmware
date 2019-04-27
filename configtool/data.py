@@ -13,8 +13,8 @@ supportedCPUs = ['ATmega168', 'ATmega328P', 'ATmega644', 'ATmega644P',
 #       names from the compiler environment and/or header files.
 pinNames = ["AIO%d" % x for x in range(16)] + \
            ["DIO%d" % x for x in range(64)] + \
-           ["P%c%d" % (c, x) for c in range(ord('A'), ord('L') + 1) \
-                             for x in range(8)]
+           ["P%c%d" % (c, x) for c in range(ord('A'), ord('L') + 1)
+            for x in range(8)]
 
 sensorTypes = {'MAX6675': "TT_MAX6675", 'Thermistor': "TT_THERMISTOR",
                'AD595': "TT_AD595", 'PT100': "TT_PT100",
@@ -25,11 +25,11 @@ BSIZESMALL = (90, 30)
 
 
 if platform.startswith("win"):
-  offsetTcLabel = 4
-  offsetChLabel = 4
+    offsetTcLabel = 4
+    offsetChLabel = 4
 else:
-  offsetTcLabel = 6
-  offsetChLabel = 8
+    offsetTcLabel = 6
+    offsetChLabel = 8
 
 TYPE_GENERAL = 0
 TYPE_FLOAT = 1
@@ -60,24 +60,37 @@ reHelpTextStart = re.compile("^\s*/\*\*\s+\\\\def\s+(.*)")
 reHelpTextEnd = re.compile("^\s*\*/")
 reHelpText = re.compile("/\*\*.*?\*/\r?\n", re.DOTALL)
 
-reSensor = re.compile(".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)")
-# reHeater3 and reHeater4 deprecated, for compatibility with old config files only.
+reSensor = re.compile(
+    ".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)")
+# reHeater3 and reHeater4 deprecated, for compatibility with old
+# config files only.
 reHeater3 = re.compile(".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)")
-reHeater4 = re.compile(".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)")
-reHeater5 = re.compile(".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)")
-reTempTable4 = re.compile(".*\\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d*.?\d*)\s*\\)")
-reTempTable7 = re.compile(".*\\(\s*(\d+)\s*,\s*(\d*.?\d*)\s*,\s*(\d+)\s*,\s*(\d*.?\d*)\s*,\s*(\d+)\s*,\s*(\d*.?\d*)\s*,\s*(\d+)\s*\\)")
+reHeater4 = re.compile(
+    ".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)")
+reHeater5 = re.compile(
+    ".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)")
+reTempTable4 = re.compile(
+    ".*\\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d*.?\d*)\s*\\)")
+reTempTable7 = re.compile(
+    ".*\\(\s*(\d+)\s*, "
+    "\s*(\d*.?\d*)\s*,
+    "\s*(\d+)\s*, "
+    "\s*(\d*.?\d*)\s*, "
+    "\s*(\d+)\s*, "
+    "\s*(\d*.?\d*)\s*, "
+    "\s*(\d+)\s *\\)")
 
 reInteger = re.compile("^\d+U?L?$")
 reFloat = re.compile("^\d+(\.\d*)?$")
 
-defineValueFormat =      "#define %-24s %s\n"
-defineBoolFormat =       "#define %s\n"
-defineHeaterFormat =     "#define HEATER_%s HEATER_%s\n"
+defineValueFormat = "#define %-24s %s\n"
+defineBoolFormat = "#define %s\n"
+defineHeaterFormat = "#define HEATER_%s HEATER_%s\n"
 defineDCExtruderFormat = "#define %-24s HEATER_%s\n"
 
 reHomingOpts = re.compile("^\s*//\s*#define\s+HOMING_OPT\s+(\w+)")
 reStartHoming = re.compile("^\s*//\s*DEFINE_HOMING_START")
 reEndHoming = re.compile("^\s*//\s*DEFINE_HOMING_END")
 reDefHoming = re.compile("\s*(DEFINE_HOMING\\([^)]*\\))")
-reHoming4 = re.compile(".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)")
+reHoming4 = re.compile(
+    ".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)")

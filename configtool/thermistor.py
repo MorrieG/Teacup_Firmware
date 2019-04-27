@@ -40,7 +40,8 @@ class SHThermistor:
 
     def temp(self, adc):
         r = self.adcInv(adc)
-        t = (1.0 / (self.A + self.B * log(r) + self.C * (log(r) ** 3))) - 273.15
+        t = (1.0 / (
+            self.A + self.B * log(r) + self.C * (log(r) ** 3))) - 273.15
         return t
 
     def adc(self, r):

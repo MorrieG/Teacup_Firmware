@@ -86,8 +86,9 @@ def BetaTable(ofp, params, names, settings, finalTable):
                 "maxadc = %s") % (r0, settings.t0, settings.r1, r2,
                                   beta, settings.maxAdc))
     ofp.output("  {")
-    thrm = BetaThermistor(int(r0), int(settings.t0), int(beta), int(settings.r1),
-                          int(r2), vadc)
+    thrm = BetaThermistor(
+        int(r0), int(settings.t0), int(beta), int(settings.r1),
+        int(r2), vadc)
     hiadc = thrm.setting(0)[0]
     N = int(settings.numTemps)
     samples = optimizeTempTable(thrm, N, hiadc)
@@ -106,9 +107,11 @@ def BetaTable(ofp, params, names, settings, finalTable):
         else:
             c = ","
         delta = (t - thrm.temp(prev)) / (prev - i) if i != prev else 0
-        ostr = ("    {%4s, %5s, %5s}%s // %4d C, %6.0f ohms, %0.3f V,"
-                " %0.2f mW, m = %6.3f") % (i, int(t * 4), int(delta * 4 * 256), c,
-                                           int(t), int(round(r)), vTherm, ptherm * 1000, delta)
+        ostr = (
+            "    {%4s, %5s, %5s}%s // %4d C, %6.0f ohms, %0.3f V,"
+            " %0.2f mW, m = %6.3f") % (
+                i, int(t * 4), int(delta * 4 * 256), c,
+            int(t), int(round(r)), vTherm, ptherm * 1000, delta)
         ofp.output(ostr)
         prev = i
     if finalTable:
@@ -120,10 +123,11 @@ def BetaTable(ofp, params, names, settings, finalTable):
 def SteinhartHartTable(ofp, params, names, settings, finalTable):
     ofp.output(("  // %s temp table using Steinhart-Hart algorithm with "
                 "parameters:") % (", ".join(names)))
-    ofp.output(("  // Rp = %s, T0 = %s, R0 = %s, T1 = %s, R1 = %s, "
-                "T2 = %s, R2 = %s") %
-               (params[0], params[1], params[2], params[3], params[4], params[5],
-                params[6]))
+    ofp.output(
+        ("  // Rp = %s, T0 = %s, R0 = %s, T1 = %s, R1 = %s, "
+         "T2 = %s, R2 = %s") %
+        (params[0], params[1], params[2], params[3], params[4], params[5],
+         params[6]))
     ofp.output("  {")
     thrm = SHThermistor(int(params[0]), float(params[1]), int(params[2]),
                         float(params[3]), int(params[4]), float(params[5]),
@@ -143,9 +147,10 @@ def SteinhartHartTable(ofp, params, names, settings, finalTable):
         else:
             c = ","
         delta = (t - thrm.temp(prev)) / (prev - i) if i != prev else 0
-        ofp.output("    {%4d, %5d, %5d}%s // %4d C, %6d ohms, m = %6.3f" %
-                   (i, int(t * 4), int(delta * 4 * 256), c, int(t), int(round(r)),
-                    delta))
+        ofp.output(
+            "    {%4d, %5d, %5d}%s // %4d C, %6d ohms, m = %6.3f" %
+            (i, int(t * 4), int(delta * 4 * 256), c, int(t), int(round(r)),
+             delta))
         prev = i
     if finalTable:
         ofp.output("  }")

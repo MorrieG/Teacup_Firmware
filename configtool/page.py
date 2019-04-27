@@ -119,7 +119,7 @@ class Page:
         return lsz
 
     def setChoice(self, name, cfgValues, default):
-        if name in cfgValues.keys() and cfgValues[name][1] == True:
+        if name in cfgValues.keys() and cfgValues[name][1] is True:
             bv = cfgValues[name][0]
         else:
             bv = default
@@ -226,7 +226,7 @@ class Page:
         for k in self.textControls.keys():
             if k in cfgValues.keys():
                 self.textControlsOriginal[k] = cfgValues[k]
-                if cfgValues[k][1] == True:
+                if cfgValues[k][1] is True:
                     self.textControls[k].SetValue(str(cfgValues[k][0]))
                 else:
                     self.textControls[k].SetValue("")
@@ -242,7 +242,8 @@ class Page:
             choice = self.boolChoices[k]
             # Remove items left behind from the previous configuration.
             while (choice.GetCount() and
-                   not choice.GetString(choice.GetCount() - 1).startswith('(')):
+                   not choice.GetString(
+                       choice.GetCount() - 1).startswith('(')):
                 choice.Delete(choice.GetCount() - 1)
             # Add items found in this configuration.
             for cfg in cfgValues.keys():
@@ -251,8 +252,9 @@ class Page:
                         choice.Append(self.labels[cfg])
                     else:
                         choice.Append(cfg)
-                    # As we want to write the configuration name later, not the user
-                    # friendly string, we store the configuration name as client data.
+                    # As we want to write the configuration name later,
+                    # not the user friendly string, we store the
+                    # configuration name as client data.
                     n = choice.GetCount() - 1
                     choice.SetClientData(n, cfg)
                     if cfgValues[cfg]:

@@ -32,9 +32,9 @@
 
     Valid range: 20 to 4'0960'000 (0.02 to 40960 steps/mm)
 */
-#define STEPS_PER_M_X            80000
-#define STEPS_PER_M_Y            80000
-#define STEPS_PER_M_Z            3200000
+#define STEPS_PER_M_X            40000
+#define STEPS_PER_M_Y            40000
+#define STEPS_PER_M_Z            2000000
 #define STEPS_PER_M_E            53844
 
 /** \def MAXIMUM_FEEDRATE_X MAXIMUM_FEEDRATE_Y MAXIMUM_FEEDRATE_Z MAXIMUM_FEEDRATE_E
@@ -92,10 +92,10 @@
     Sane values: according to printer build room size
     Valid range: -1000.0 to 1000.0
 */
-#define X_MIN                    0
+#define X_MIN                    1
 #define X_MAX                    100.0
 
-#define Y_MIN                    0
+#define Y_MIN                    1
 #define Y_MAX                    100.0
 
 #define Z_MIN                    0.0
@@ -109,7 +109,7 @@
 
   This is the startup default and can be changed with M82/M83 while running.
 */
-#define E_ABSOLUTE
+//#define E_ABSOLUTE
 
 /** \def HOMING_OPT
 
@@ -151,7 +151,7 @@ DEFINE_HOMING(('Step 1:', True), ('Step 2:', True), ('Step 3:', True), ('Step 4:
     Units: mm/s^2
     Useful range: 1 to 10'000
 */
-#define ACCELERATION             2000
+#define ACCELERATION             100
 
 /** \def LOOKAHEAD
   Define this to enable look-ahead during *ramping* acceleration to smoothly
@@ -317,7 +317,7 @@ DEFINE_HOMING(('Step 1:', True), ('Step 2:', True), ('Step 3:', True), ('Step 4:
   this value as the index or name. You probably also want to comment out
   E_STEP_PIN and E_DIR_PIN in the Pinouts section above.
 */
-//#define DC_EXTRUDER              HEATER_motor
+//#define DC_EXTRUDER              HEATER_extruder
 //#define DC_EXTRUDER_PWM          180
 
 /** \def USE_WATCHDOG

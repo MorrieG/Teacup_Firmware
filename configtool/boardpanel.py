@@ -155,7 +155,8 @@ class BoardPanel(wx.Panel):
         return True
 
     def onLoadConfig(self, evt):
-        if not self.confirmLoseChanges("load a new board configuration"):
+        if not self.confirmLoseChanges(
+                "load a new board configuration"):
             return
 
         if platform.startswith("darwin"):
@@ -164,9 +165,10 @@ class BoardPanel(wx.Panel):
         else:
             wildcard = "Board configuration (board.*.h)|board.*.h"
 
-        dlg = wx.FileDialog(self, message="Choose a board config file",
-                            defaultDir=self.dir, defaultFile="",
-                            wildcard=wildcard, style=wx.FD_OPEN | wx.FD_CHANGE_DIR)
+        dlg = wx.FileDialog(
+            self, message="Choose a board config file",
+            defaultDir=self.dir, defaultFile="",
+            wildcard=wildcard, style=wx.FD_OPEN | wx.FD_CHANGE_DIR)
 
         path = None
         if dlg.ShowModal() == wx.ID_OK:
@@ -246,17 +248,19 @@ class BoardPanel(wx.Panel):
 
     def saveConfigFile(self, path):
         if os.path.basename(path) in protectedFiles:
-            dlg = wx.MessageDialog(self, "It's not allowed to overwrite files "
-                                   "distributed by Teacup. Choose another name.",
-                                   "Protected file error", wx.OK + wx.ICON_ERROR)
+            dlg = wx.MessageDialog(
+                self, "It's not allowed to overwrite files "
+                "distributed by Teacup. Choose another name.",
+                "Protected file error", wx.OK + wx.ICON_ERROR)
             dlg.ShowModal()
             dlg.Destroy()
             return False
 
         if not os.path.basename(path).startswith("board."):
-            dlg = wx.MessageDialog(self, "Illegal file name: %s.\n"
-                                   "File name must begin with \"board.\"" % path,
-                                   "Illegal file name", wx.OK + wx.ICON_ERROR)
+            dlg = wx.MessageDialog(
+                self, "Illegal file name: %s.\n"
+                "File name must begin with \"board.\"" % path,
+                "Illegal file name", wx.OK + wx.ICON_ERROR)
             dlg.ShowModal()
             dlg.Destroy()
             return False
@@ -286,8 +290,9 @@ class BoardPanel(wx.Panel):
 
     def generateTempTables(self):
         if not generateTempTables(self.board.sensors, self.settings):
-            dlg = wx.MessageDialog(self, "Error writing to file thermistortable.h.",
-                                   "File error", wx.OK + wx.ICON_ERROR)
+            dlg = wx.MessageDialog(
+                self, "Error writing to file thermistortable.h.",
+                "File error", wx.OK + wx.ICON_ERROR)
             dlg.ShowModal()
             dlg.Destroy()
             return False

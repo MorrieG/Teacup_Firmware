@@ -14,16 +14,18 @@ class SensorsPage(wx.Panel, Page):
         self.heatersPage = heatersPage
         self.font = font
         self.id = idPg
-        self.sensorTypeKeys = {'TT_MAX6675': 'TEMP_MAX6675',
-                               'TT_THERMISTOR': 'TEMP_THERMISTOR',
-                               'TT_AD595': 'TEMP_AD595', 'TT_PT100': 'TEMP_PT100',
-                               'TT_INTERCOM': 'TEMP_INTERCOM',
-                               'TT_MCP3008': 'TEMP_MCP3008'}
-        self.labels = {'TEMP_MAX6675': "MAX6675", 'TEMP_THERMISTOR': "Thermistor",
-                       'TEMP_AD595': "AD595", 'TEMP_PT100': "PT100",
-                       'TEMP_INTERCOM': "Intercom",
-                       'TEMP_MCP3008': 'MCP3008',
-                       'MCP3008_SELECT_PIN': "MCP3008 CS Pin:"}
+        self.sensorTypeKeys = {
+            'TT_MAX6675': 'TEMP_MAX6675',
+            'TT_THERMISTOR': 'TEMP_THERMISTOR',
+            'TT_AD595': 'TEMP_AD595', 'TT_PT100': 'TEMP_PT100',
+            'TT_INTERCOM': 'TEMP_INTERCOM',
+            'TT_MCP3008': 'TEMP_MCP3008'}
+        self.labels = {
+            'TEMP_MAX6675': "MAX6675", 'TEMP_THERMISTOR': "Thermistor",
+            'TEMP_AD595': "AD595", 'TEMP_PT100': "PT100",
+            'TEMP_INTERCOM': "Intercom",
+            'TEMP_MCP3008': 'MCP3008',
+            'MCP3008_SELECT_PIN': "MCP3008 CS Pin:"}
         self.validPins = pinNames
         labelWidth = 120
         sz = wx.GridBagSizer()
@@ -57,7 +59,7 @@ class SensorsPage(wx.Panel, Page):
         self.Bind(wx.EVT_BUTTON, self.doDelete, self.bDelete)
         bsz.Add(self.bDelete)
         self.bDelete.SetToolTip("Remove the selected temperature sensor "
-                                      "from the configuration.")
+                                "from the configuration.")
         sz.Add(bsz, pos=(1, 3))
         k = "MCP3008_SELECT_PIN"
         tc = self.addPinChoice(k, labelWidth)
@@ -102,9 +104,10 @@ class SensorsPage(wx.Panel, Page):
             params = []
         else:
             params = s[3]
-        dlg = AddSensorDlg(self, nm, self.validPins, self.heatersPage, self.font,
-                           name=s[0], stype=s[1], pin=s[2],
-                           params=params, modify=True)
+        dlg = AddSensorDlg(
+            self, nm, self.validPins, self.heatersPage, self.font,
+            name=s[0], stype=s[1], pin=s[2],
+            params=params, modify=True)
         rc = dlg.ShowModal()
         if rc == wx.ID_OK:
             tt = dlg.getValues()

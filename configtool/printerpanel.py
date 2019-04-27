@@ -146,9 +146,10 @@ class PrinterPanel(wx.Panel):
         else:
             wildcard = "Printer configuration (printer.*.h)|printer.*.h"
 
-        dlg = wx.FileDialog(self, message="Choose a printer config file",
-                            defaultDir=self.dir, defaultFile="",
-                            wildcard=wildcard, style=wx.FD_OPEN | wx.FD_CHANGE_DIR)
+        dlg = wx.FileDialog(
+            self, message="Choose a printer config file",
+            defaultDir=self.dir, defaultFile="",
+            wildcard=wildcard, style=wx.FD_OPEN | wx.FD_CHANGE_DIR)
 
         path = None
         if dlg.ShowModal() == wx.ID_OK:
@@ -185,7 +186,8 @@ class PrinterPanel(wx.Panel):
             pg.setHelpText(self.printer.helpText)
 
         k = 'DC_EXTRUDER'
-        if k in self.printer.cfgValues.keys() and self.printer.cfgValues[k][1] == True:
+        if k in self.printer.cfgValues.keys() and self.printer.cfgValues[
+                k][1] is True:
             self.pgMiscellaneous.setOriginalHeater(
                 self.printer.cfgValues[k][0])
         else:
@@ -226,17 +228,19 @@ class PrinterPanel(wx.Panel):
 
     def saveConfigFile(self, path):
         if os.path.basename(path) in protectedFiles:
-            dlg = wx.MessageDialog(self, "It's not allowed to overwrite files "
-                                   "distributed by Teacup. Choose another name.",
-                                   "Protected file error", wx.OK + wx.ICON_ERROR)
+            dlg = wx.MessageDialog(
+                self, "It's not allowed to overwrite files "
+                "distributed by Teacup. Choose another name.",
+                "Protected file error", wx.OK + wx.ICON_ERROR)
             dlg.ShowModal()
             dlg.Destroy()
             return False
 
         if not os.path.basename(path).startswith("printer."):
-            dlg = wx.MessageDialog(self, "Illegal file name: %s.\n"
-                                   "File name must begin with \"printer.\"" % path,
-                                   "Illegal file name", wx.OK + wx.ICON_ERROR)
+            dlg = wx.MessageDialog(
+                self, "Illegal file name: %s.\n"
+                "File name must begin with \"printer.\"" % path,
+                "Illegal file name", wx.OK + wx.ICON_ERROR)
             dlg.ShowModal()
             dlg.Destroy()
             return False

@@ -117,8 +117,8 @@ class ScriptThread:
                     p = subprocess.Popen(args, stderr=subprocess.STDOUT,
                                          stdout=subprocess.PIPE)
             except:
-                evt = scriptEvent(msg="Exception occurred trying to run\n\n%s" % cmd,
-                                  state=SCRIPT_CANCELLED)
+                evt = scriptEvent(msg="Exception occurred trying to run\n\n%s"
+                                  % cmd, state=SCRIPT_CANCELLED)
                 wx.PostEvent(self.win, evt)
                 self.running = False
                 return
@@ -266,7 +266,8 @@ class Build(wx.Dialog):
         # Work around a problem of avr-ld.exe coming with Arduino 1.6.4 for
         # Windows. Without this it always drops this error message:
         #   collect2.exe: error: ld returned 5 exit status 255
-        # Just enabling verbose messages allows ld.exe to complete without failure.
+        # Just enabling verbose messages allows ld.exe to complete
+        # without failure.
         if platform.startswith("win"):
             cmdpath += " -Wl,-V"
 
@@ -366,9 +367,10 @@ class Build(wx.Dialog):
 
     def onExit(self, evt):
         if self.active:
-            dlg = wx.MessageDialog(self, "Are you sure you want to cancel building?",
-                                   "Build active",
-                                   wx.YES_NO | wx.NO_DEFAULT | wx.ICON_INFORMATION)
+            dlg = wx.MessageDialog(self, "Are you sure you want to cancel "
+                                   "building?", "Build active",
+                                   wx.YES_NO | wx.NO_DEFAULT |
+                                   wx.ICON_INFORMATION)
             rc = dlg.ShowModal()
             dlg.Destroy()
 
@@ -456,9 +458,10 @@ class Upload(wx.Dialog):
 
     def onExit(self, evt):
         if self.active:
-            dlg = wx.MessageDialog(self, "Are you sure you want to cancel upload?",
-                                   "Upload active",
-                                   wx.YES_NO | wx.NO_DEFAULT | wx.ICON_INFORMATION)
+            dlg = wx.MessageDialog(self, "Are you sure you want to cancel "
+                                   "upload?", "Upload active", wx.YES_NO |
+                                   wx.NO_DEFAULT |
+                                   wx.ICON_INFORMATION)
             rc = dlg.ShowModal()
             dlg.Destroy()
 

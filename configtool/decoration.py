@@ -6,12 +6,12 @@ import os.path
 class Decoration(object):
     def __new__(type, *args):
         # Make it a Singleton.
-        if not '_the_instance' in type.__dict__:
+        if '_the_instance' not in type.__dict__:
             type._the_instance = object.__new__(type)
         return type._the_instance
 
     def __init__(self):
-        if not '_ready' in dir(self):
+        if '_ready' not in dir(self):
             self._ready = True
             # It's a Singleton. Initialisations go in here.
             self.backPic = None

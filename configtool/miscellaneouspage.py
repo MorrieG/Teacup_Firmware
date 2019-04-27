@@ -166,11 +166,12 @@ class MiscellaneousPage(wx.Panel, Page):
             v = self.heaterNames.index(currentChoice)
         except:
             v = 0
-            dlg = wx.MessageDialog(self,
-                                   "Printer: Miscellaneous tab:\nDC Extruder heater "
-                                   "\"%s\" not defined for this board. Please check."
-                                   % currentChoice, "Warning",
-                                   wx.OK + wx.ICON_WARNING)
+            dlg = wx.MessageDialog(
+                self,
+                "Printer: Miscellaneous tab:\nDC Extruder heater "
+                "\"%s\" not defined for this board. Please check."
+                % currentChoice, "Warning",
+                wx.OK + wx.ICON_WARNING)
 
             dlg.ShowModal()
             dlg.Destroy()
@@ -185,11 +186,12 @@ class MiscellaneousPage(wx.Panel, Page):
             hname = h
         if hname and len(self.boardHeaters) != 0:
             if hname not in self.boardHeaters:
-                dlg = wx.MessageDialog(self,
-                                       "Printer: Miscellaneous tab:\nDC Extruder "
-                                       "heater \"%s\" not defined for this board. "
-                                       "Please check."
-                                       % hname, "Warning", wx.OK + wx.ICON_WARNING)
+                dlg = wx.MessageDialog(
+                    self,
+                    "Printer: Miscellaneous tab:\nDC Extruder "
+                    "heater \"%s\" not defined for this board. "
+                    "Please check."
+                    % hname, "Warning", wx.OK + wx.ICON_WARNING)
 
                 dlg.ShowModal()
                 dlg.Destroy()

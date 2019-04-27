@@ -51,44 +51,44 @@
 #define X_STEP_PIN               DIO2
 #define X_DIR_PIN                DIO5
 #define X_MIN_PIN                DIO9
-//#define X_MAX_PIN                DIO21
+#define X_MAX_PIN                DIO14
 #define X_ENABLE_PIN             DIO8
 //#define X_INVERT_DIR
 //#define X_INVERT_MIN
 //#define X_INVERT_MAX
-#define X_INVERT_ENABLE
+//#define X_INVERT_ENABLE
 
 #define Y_STEP_PIN               DIO3
 #define Y_DIR_PIN                DIO6
 #define Y_MIN_PIN                DIO10
-//#define Y_MAX_PIN                DIO26
+#define Y_MAX_PIN                DIO15
 #define Y_ENABLE_PIN             DIO8
 //#define Y_INVERT_DIR
 //#define Y_INVERT_MIN
 //#define Y_INVERT_MAX
-#define Y_INVERT_ENABLE
+//#define Y_INVERT_ENABLE
 
 #define Z_STEP_PIN               DIO4
 #define Z_DIR_PIN                DIO7
 #define Z_MIN_PIN                DIO11
-//#define Z_MAX_PIN                DIO31
+#define Z_MAX_PIN                DIO16
 #define Z_ENABLE_PIN             DIO8
 //#define Z_INVERT_DIR
 //#define Z_INVERT_MIN
 //#define Z_INVERT_MAX
-#define Z_INVERT_ENABLE
+//#define Z_INVERT_ENABLE
 
 #define E_STEP_PIN               DIO12
 #define E_DIR_PIN                DIO13
 #define E_ENABLE_PIN             DIO8
 //#define E_INVERT_DIR
-#define E_INVERT_ENABLE
+//#define E_INVERT_ENABLE
 
 //#define PS_ON_PIN                DIO14
 //#define PS_INVERT_ON
 //#define PS_MOSFET_PIN            xxxx
 #define STEPPER_ENABLE_PIN       DIO8
-#define STEPPER_INVERT_ENABLE
+//#define STEPPER_INVERT_ENABLE
 
 /** \def DEBUG_LED_PIN
 
@@ -146,10 +146,10 @@
   performance.
 */
 //#define TEMP_MAX6675
-#define TEMP_THERMISTOR
+//#define TEMP_THERMISTOR
 //#define TEMP_AD595
 //#define TEMP_PT100
-//#define TEMP_INTERCOM
+#define TEMP_INTERCOM
 //#define TEMP_MCP3008
 
 /** \def TEMP_SENSOR_PIN
@@ -182,11 +182,10 @@
 */
 //DEFINE_TEMP_SENSORS_START
 //                 name      type           pin    additional
-DEFINE_TEMP_SENSOR(extruder, TT_THERMISTOR, AIO3,  THERMISTOR_EXTRUDER)
+DEFINE_TEMP_SENSOR(extruder, TT_INTERCOM,   AIO1,  0)
 
 // Beta algorithm      r0      beta  r2    vadc
 // Steinhart-Hart      rp      t0    r0      t1    r1      t2    r2
-//TEMP_TABLE EXTRUDER (100000, 4092, 4700, 5.0)
 //DEFINE_TEMP_SENSORS_END
 
 
@@ -208,7 +207,6 @@ DEFINE_TEMP_SENSOR(extruder, TT_THERMISTOR, AIO3,  THERMISTOR_EXTRUDER)
   Heater pins a user should be able to choose from in configtool. All
   commented out.
 */
-//#define HEATER_PIN AIO2
 
 /** \def DEFINE_HEATER
   Define your heaters and devices here.
@@ -244,7 +242,7 @@ DEFINE_TEMP_SENSOR(extruder, TT_THERMISTOR, AIO3,  THERMISTOR_EXTRUDER)
 
 //DEFINE_HEATERS_START
 //            name      pin      invert  pwm     max_pwm
-DEFINE_HEATER(extruder, AIO2,    0,      1,     100)
+DEFINE_HEATER(extruder, AIO0,    0,      1,     100)
 
 #define HEATER_EXTRUDER HEATER_extruder
 //DEFINE_HEATERS_END
@@ -320,5 +318,5 @@ DEFINE_HEATER(extruder, AIO2,    0,      1,     100)
   Comment in the display in use, comment out all others. If there is no
   display, comment out all of DISPLAY_BUS_xxx.
 */
-//#define DISPLAY_TYPE_SSD1306
+#define DISPLAY_TYPE_SSD1306
 //#define DISPLAY_TYPE_HD44780

@@ -41,7 +41,7 @@ class Board:
         return vF_CPU, vCPU
 
     def hasData(self):
-        return (self.configFile != None)
+        return (self.configFile is not None)
 
     def getFileName(self):
         return self.configFile
@@ -108,14 +108,15 @@ class Board:
                 prevLines = ""
             self.parseDefineName(ln)
             self.parseDefineValue(ln)
-        # Set all boolean generic configuration items to False, so items not yet
-        # existing in the user configuration default to disabled.
+        # Set all boolean generic configuration items to False, so items
+        # not yet existing in the user configuration default to disabled.
         #
         # An alternative would be to allow both, enabled and disabled booleans
-        # in board.generic.h, which then allows to set an appropriate default for
-        # each #define. This was tried but conflicted with config file writing code
-        # below (disabled #defines were reset to the default, even when set
-        # differently in the GUI), so this would need adjustment, too.
+        # in board.generic.h, which then allows to set an appropriate default
+        # for  each #define. This was tried but conflicted with config file
+        # writing code  below (disabled #defines were reset to the default,
+        # even when set  differently in the GUI), so this would need
+        # adjustment, too.
         for k in self.cfgValues.keys():
             if isinstance(self.cfgValues[k], bool):
                 self.cfgValues[k] = False
@@ -219,8 +220,9 @@ class Board:
             # Booleans already existing as values are most likely misconfigured
             # manual edits (or result of a bug).
             if len(t) == 1 and t[0] in self.cfgNames \
-                and not (t[0] in self.cfgValues
-                         and isinstance(self.cfgValues[t[0]], tuple)):
+                and not (
+                    t[0] in self.cfgValues and isinstance(
+                        self.cfgValues[t[0]], tuple)):
                 if reDefBoolBL.search(ln):
                     self.cfgValues[t[0]] = True
                 else:
@@ -333,8 +335,8 @@ class Board:
                          "additional\n")
                 ttString = "\n"
                 ttString += "// Beta algorithm      r0      beta  r2    vadc\n"
-                ttString += "// Steinhart-Hart      rp      t0    r0      t1    "
-                ttString += "r1      t2    r2\n"
+                ttString += "// Steinhart-Hart      rp      t0    r0      "
+                ttString += "t1    r1      t2    r2\n"
                 for s in self.sensors:
                     sstr = "%-10s%-15s%-7s" % ((s[0] + ","),
                                                (s[1] + ","), (s[2] + ","))
@@ -344,15 +346,18 @@ class Board:
                         sstr += "THERMISTOR_%s" % s[0].upper()
                         tt = s[3]
                         if len(tt) == 4:
-                            ttString += "//TEMP_TABLE %-8s (%-8s%-6s%-6s%s)\n" % \
-                                        (s[0].upper(), (tt[0] + ","), (tt[1] + ","),
-                                         (tt[2] + ","), tt[3])
+                            ttString += "//TEMP_TABLE %-8s "
+                            "(%-8s%-6s%-6s%s)\n" \
+                                % (s[0].upper(), (tt[0] + ","), (
+                                    tt[1] + ","),
+                                   (tt[2] + ","), tt[3])
                         else:
-                            ttString += "//TEMP_TABLE %-8s (%-8s%-6s%-8s%-6s%-8s%-6s%s)\n" % \
-                                        (s[0].upper(), (tt[0] + ","), (tt[1] + ","),
-                                         (tt[2] + ","), (tt[3] +
-                                                         ","), (tt[4] + ","),
-                                         (tt[5] + ","), tt[6])
+                            ttString += "//TEMP_TABLE %-8s "
+                            "(%-8s%-6s%-8s%-6s%-8s%-6s%s)\n" % \
+                                (s[0].upper(), (tt[0] + ","), (tt[1] + ","),
+                                 (tt[2] + ","), (tt[3] +
+                                                 ","), (tt[4] + ","),
+                                    (tt[5] + ","), tt[6])
                     fp.write("DEFINE_TEMP_SENSOR(%s)\n" % sstr)
                 fp.write(ttString)
                 skipToSensorEnd = True
@@ -367,10 +372,13 @@ class Board:
             if m:
                 fp.write(ln)
                 fp.write(
-                    "//            name      pin      invert  pwm     max_pwm\n")
+                    "//            name      pin      invert  pwm     max_pwm"
+                    "\n"
+                )
                 for s in self.heaters:
-                    sstr = "%-10s%-9s%-8s%-7s%s" % ((s[0] + ","), (s[1] + ","),
-                                                    (s[2] + ","), s[3] + ",", s[4])
+                    sstr = "%-10s%-9s%-8s%-7s%s" % (
+                        (s[0] + ","), (s[1] + ","),
+                        (s[2] + ","), s[3] + ",", s[4])
                     fp.write("DEFINE_HEATER(%s)\n" % sstr)
                 fp.write("\n")
                 for s in self.heaters:
@@ -413,12 +421,13 @@ class Board:
                 if len(t) == 2 and t[0] in values.keys():
                     v = values[t[0]]
                     self.cfgValues[t[0]] = v
-                    if v[1] == False:
+                    if v[1] is False:
                         fp.write("//")
                     fp.write(defineValueFormat % (t[0], v[0]))
                 else:
                     if t[0] == 'RX_ENABLE_PIN' or t[0] == 'TX_ENABLE_PIN':
-                        # Known to be absent in the GUI, also won't be added anytime soon.
+                        # Known to be absent in the GUI, also won't be
+                        # added anytime soon.
                         fp.write(ln)
                     else:
                         print("Value key " + t[0] + " not found in GUI.")
@@ -429,12 +438,13 @@ class Board:
                 if len(t) == 1 and t[0] in values.keys():
                     v = values[t[0]]
                     self.cfgValues[t[0]] = v
-                    if v == "" or v == False:
+                    if v is "" or v is False:
                         fp.write("//")
                     fp.write(defineBoolFormat % t[0])
                 else:
                     if t[0] == 'MOTHERBOARD':
-                        # Known to be absent in the GUI, also won't be added anytime soon.
+                        # Known to be absent in the GUI, also won't be
+                        # added anytime soon.
                         fp.write(ln)
                     else:
                         print("Boolean key " + t[0] + " not found in GUI.")
