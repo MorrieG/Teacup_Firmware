@@ -73,7 +73,7 @@ reTempTable4 = re.compile(
     ".*\\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d*.?\d*)\s*\\)")
 reTempTable7 = re.compile(
     ".*\\(\s*(\d+)\s*, "
-    "\s*(\d*.?\d*)\s*,
+    "\s*(\d*.?\d*)\s*, "
     "\s*(\d+)\s*, "
     "\s*(\d*.?\d*)\s*, "
     "\s*(\d+)\s*, "
