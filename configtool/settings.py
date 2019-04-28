@@ -123,7 +123,7 @@ class Settings:
         for k in values.keys():
             self.cfg.set(self.section, k, values[k])
         try:
-            cfp = open(inifile, 'w')
+            cfp = open(inifile, 'wb')
         except:
             print("Unable to open settings file %s for writing." % inifile)
             return False

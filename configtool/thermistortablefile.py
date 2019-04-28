@@ -8,7 +8,7 @@ class ThermistorTableFile:
         self.error = False
         fn = os.path.join(folder, "thermistortable.h")
         try:
-            self.fp = open(fn, 'w')
+            self.fp = open(fn, 'wb')
         except:
             self.error = True
 
