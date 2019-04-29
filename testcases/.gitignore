@@ -1,4 +1,6 @@
 *.vcd
 *.data
 *.png
+*.pyc
+*.bak
 
