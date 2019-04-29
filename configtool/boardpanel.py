@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 import os
 import wx
 import re
@@ -270,7 +270,6 @@ class BoardPanel(wx.Panel):
             v1 = pg.getValues()
             for k in v1.keys():
                 values[k] = v1[k]
-
         ext = os.path.splitext(os.path.basename(path))[1]
         self.dir = os.path.dirname(path)
 
@@ -289,6 +288,7 @@ class BoardPanel(wx.Panel):
         return self.generateTempTables()
 
     def generateTempTables(self):
+
         if not generateTempTables(self.board.sensors, self.settings):
             dlg = wx.MessageDialog(
                 self, "Error writing to file thermistortable.h.",

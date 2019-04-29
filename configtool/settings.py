@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 from __future__ import print_function
+
 import configparser
 import os
 import wx
@@ -123,7 +125,7 @@ class Settings:
         for k in values.keys():
             self.cfg.set(self.section, k, values[k])
         try:
-            cfp = open(inifile, 'wb')
+            cfp = open(inifile, 'w')
         except:
             print("Unable to open settings file %s for writing." % inifile)
             return False

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import print_function
 import os
 import re
@@ -346,18 +347,11 @@ class Board:
                         sstr += "THERMISTOR_%s" % s[0].upper()
                         tt = s[3]
                         if len(tt) == 4:
-                            ttString += "//TEMP_TABLE %-8s "
-                            "(%-8s%-6s%-6s%s)\n" \
-                                % (s[0].upper(), (tt[0] + ","), (
-                                    tt[1] + ","),
-                                   (tt[2] + ","), tt[3])
+                            ttString += "//TEMP_TABLE %-8s (%-8s%-6s%-6s%s)\n" % (
+                                s[0].upper(), (tt[0] + ","), (tt[1] + ","), (tt[2] + ","), tt[3])
                         else:
-                            ttString += "//TEMP_TABLE %-8s "
-                            "(%-8s%-6s%-8s%-6s%-8s%-6s%s)\n" % \
-                                (s[0].upper(), (tt[0] + ","), (tt[1] + ","),
-                                 (tt[2] + ","), (tt[3] +
-                                                 ","), (tt[4] + ","),
-                                    (tt[5] + ","), tt[6])
+                            ttString += "//TEMP_TABLE %-8s (%-8s%-6s%-8s%-6s%-8s%-6s%s)\n" % (s[0].upper(
+                            ), (tt[0] + ","), (tt[1] + ","), (tt[2] + ","), (tt[3] + ","), (tt[4] + ","), (tt[5] + ","), tt[6])
                     fp.write("DEFINE_TEMP_SENSOR(%s)\n" % sstr)
                 fp.write(ttString)
                 skipToSensorEnd = True
@@ -372,13 +366,11 @@ class Board:
             if m:
                 fp.write(ln)
                 fp.write(
-                    "//            name      pin      invert  pwm     max_pwm"
-                    "\n"
+                    "//            name      pin      invert  pwm     max_pwm\n"
                 )
                 for s in self.heaters:
                     sstr = "%-10s%-9s%-8s%-7s%s" % (
-                        (s[0] + ","), (s[1] + ","),
-                        (s[2] + ","), s[3] + ",", s[4])
+                        (s[0] + ","), (s[1] + ","), (s[2] + ","), s[3] + ",", s[4])
                     fp.write("DEFINE_HEATER(%s)\n" % sstr)
                 fp.write("\n")
                 for s in self.heaters:

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 import os
 from .thermistor import SHThermistor, BetaThermistor
@@ -8,7 +9,7 @@ class ThermistorTableFile:
         self.error = False
         fn = os.path.join(folder, "thermistortable.h")
         try:
-            self.fp = open(fn, 'wb')
+            self.fp = open(fn, 'w')
         except:
             self.error = True
 
@@ -54,7 +55,8 @@ def generateTempTables(sensors, settings):
     ofp.output("")
     for i in range(len(tl)):
         for n in tl[i][1]:
-            ofp.output("#define THERMISTOR_%s %d" % (n, i))
+            ofp.output(
+                "#define THERMISTOR_{0} {1}".format(n, i))
     ofp.output("")
     if len(tl) == 0 or N == 0:
         ofp.close()
@@ -80,11 +82,10 @@ def BetaTable(ofp, params, names, settings, finalTable):
     beta = params[1]
     r2 = params[2]
     vadc = float(params[3])
-    ofp.output("  // %s temp table using Beta algorithm with parameters:" %
-               (", ".join(names)))
-    ofp.output(("  // R0 = %s, T0 = %s, R1 = %s, R2 = %s, beta = %s, "
-                "maxadc = %s") % (r0, settings.t0, settings.r1, r2,
-                                  beta, settings.maxAdc))
+    ofp.output(
+        "  // {0} temp table using Beta algorithm with parameters:".format(", ".join(names)))
+    ofp.output(("  // R0 = %s, T0 = %s, R1 = %s, R2 = %s, beta = %s, maxadc = %s") %
+               (r0, settings.t0, settings.r1, r2, beta, settings.maxAdc))
     ofp.output("  {")
     thrm = BetaThermistor(
         int(r0), int(settings.t0), int(beta), int(settings.r1),
@@ -96,7 +97,8 @@ def BetaTable(ofp, params, names, settings, finalTable):
     for i in samples:
         t = thrm.temp(i)
         if t is None:
-            ofp.output("// ERROR CALCULATING THERMISTOR VALUES AT ADC %d" % i)
+            ofp.output(
+                "// ERROR CALCULATING THERMISTOR VALUES AT ADC %d" % i)
             continue
         v = thrm.adcInv(i)
         r = thrm.resistance(t)
@@ -107,11 +109,8 @@ def BetaTable(ofp, params, names, settings, finalTable):
         else:
             c = ","
         delta = (t - thrm.temp(prev)) / (prev - i) if i != prev else 0
-        ostr = (
-            "    {%4s, %5s, %5s}%s // %4d C, %6.0f ohms, %0.3f V,"
-            " %0.2f mW, m = %6.3f") % (
-                i, int(t * 4), int(delta * 4 * 256), c,
-            int(t), int(round(r)), vTherm, ptherm * 1000, delta)
+        ostr = ((
+            "    {%4s, %5s, %5s}%s // %4d C, %6.0f ohms, %0.3f V, %0.2f mW, m = %6.3f") % (i, int(t * 4), int(delta * 4 * 256), c, int(t), int(round(r)), vTherm, ptherm * 1000, delta))
         ofp.output(ostr)
         prev = i
     if finalTable:
@@ -121,8 +120,8 @@ def BetaTable(ofp, params, names, settings, finalTable):
 
 
 def SteinhartHartTable(ofp, params, names, settings, finalTable):
-    ofp.output(("  // %s temp table using Steinhart-Hart algorithm with "
-                "parameters:") % (", ".join(names)))
+    ofp.output(("  // %s temp table using Steinhart-Hart algorithm with parameters:") %
+               (", ".join(names)))
     ofp.output(
         ("  // Rp = %s, T0 = %s, R0 = %s, T1 = %s, R1 = %s, "
          "T2 = %s, R2 = %s") %
@@ -139,7 +138,8 @@ def SteinhartHartTable(ofp, params, names, settings, finalTable):
     for i in samples:
         t = thrm.temp(i)
         if t is None:
-            ofp.output("// ERROR CALCULATING THERMISTOR VALUES AT ADC %d" % i)
+            ofp.output(
+                "// ERROR CALCULATING THERMISTOR VALUES AT ADC %d" % i)
             continue
         r = int(thrm.adcInv(i))
         if i == max(samples):
