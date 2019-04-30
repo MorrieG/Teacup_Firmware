@@ -92,14 +92,14 @@
     Sane values: according to printer build room size
     Valid range: -1000.0 to 1000.0
 */
-#define X_MIN                    0
-#define X_MAX                    100.0
+#define X_MIN                    45
+#define X_MAX                    300
 
-#define Y_MIN                    0
-#define Y_MAX                    100.0
+#define Y_MIN                    45
+#define Y_MAX                    300
 
 #define Z_MIN                    0.0
-#define Z_MAX                    202.44
+#define Z_MAX                    0
 
 /** \def E_ABSOLUTE
   Some G-code creators produce relative length commands for the extruder,
@@ -151,7 +151,7 @@ DEFINE_HOMING(('Step 1:', True), ('Step 2:', True), ('Step 3:', True), ('Step 4:
     Units: mm/s^2
     Useful range: 1 to 10'000
 */
-#define ACCELERATION             2000
+#define ACCELERATION             10
 
 /** \def LOOKAHEAD
   Define this to enable look-ahead during *ramping* acceleration to smoothly
@@ -182,10 +182,10 @@ DEFINE_HOMING(('Step 1:', True), ('Step 2:', True), ('Step 3:', True), ('Step 4:
     Sane values: 0 to 400
     Valid range: 0 to 65535
 */
-#define MAX_JERK_X               300
-#define MAX_JERK_Y               300
+#define MAX_JERK_X               200
+#define MAX_JERK_Y               200
 #define MAX_JERK_Z               0
-#define MAX_JERK_E               300
+#define MAX_JERK_E               0
 
 
 /***************************************************************************\
@@ -317,8 +317,8 @@ DEFINE_HOMING(('Step 1:', True), ('Step 2:', True), ('Step 3:', True), ('Step 4:
   this value as the index or name. You probably also want to comment out
   E_STEP_PIN and E_DIR_PIN in the Pinouts section above.
 */
-#define DC_EXTRUDER              HEATER_extruder
-#define DC_EXTRUDER_PWM          100
+//#define DC_EXTRUDER              HEATER_extruder
+#define DC_EXTRUDER_PWM          0
 
 /** \def USE_WATCHDOG
   Teacup implements a watchdog, which has to be reset every 250ms or it will

@@ -68,19 +68,19 @@
 //#define Y_INVERT_MAX
 //#define Y_INVERT_ENABLE
 
-#define Z_STEP_PIN               DIO4
-#define Z_DIR_PIN                DIO7
-#define Z_MIN_PIN                DIO11
-#define Z_MAX_PIN                DIO14
-#define Z_ENABLE_PIN             DIO8
+//#define Z_STEP_PIN               DIO4
+//#define Z_DIR_PIN                DIO7
+//#define Z_MIN_PIN                DIO11
+//#define Z_MAX_PIN                DIO14
+//#define Z_ENABLE_PIN             DIO8
 //#define Z_INVERT_DIR
 //#define Z_INVERT_MIN
 //#define Z_INVERT_MAX
 //#define Z_INVERT_ENABLE
 
-#define E_STEP_PIN               DIO12
-#define E_DIR_PIN                DIO13
-#define E_ENABLE_PIN             DIO8
+//#define E_STEP_PIN               DIO12
+//#define E_DIR_PIN                DIO13
+//#define E_ENABLE_PIN             DIO8
 //#define E_INVERT_DIR
 //#define E_INVERT_ENABLE
 
@@ -146,7 +146,7 @@
   performance.
 */
 //#define TEMP_MAX6675
-#define TEMP_THERMISTOR
+//#define TEMP_THERMISTOR
 //#define TEMP_AD595
 //#define TEMP_PT100
 //#define TEMP_INTERCOM
@@ -182,11 +182,9 @@
 */
 //DEFINE_TEMP_SENSORS_START
 //                 name      type           pin    additional
-DEFINE_TEMP_SENSOR(extruder, TT_THERMISTOR, AIO3,  THERMISTOR_EXTRUDER)
 
 // Beta algorithm      r0      beta  r2    vadc
 // Steinhart-Hart      rp      t0    r0      t1    r1      t2    r2
-//TEMP_TABLE EXTRUDER (100000, 4092, 4700, 5.0)
 //DEFINE_TEMP_SENSORS_END
 
 
@@ -244,9 +242,7 @@ DEFINE_TEMP_SENSOR(extruder, TT_THERMISTOR, AIO3,  THERMISTOR_EXTRUDER)
 
 //DEFINE_HEATERS_START
 //            name      pin      invert  pwm     max_pwm
-DEFINE_HEATER(extruder, AIO2,    0,      1,     100)
 
-#define HEATER_EXTRUDER HEATER_extruder
 //DEFINE_HEATERS_END
 
 
