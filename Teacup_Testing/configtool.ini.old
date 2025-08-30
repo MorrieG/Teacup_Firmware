@@ -1,0 +1,14 @@
+[configtool]
+arduinodir = C:\Program Files (x86)\Arduino
+cflags = 
+ldflags = 
+objcopyflags = 
+programmer = wiring
+port = /dev/ttyACM0
+t0 = 25
+r1 = 0
+numtemps = 25
+maxadc = 1023
+minadc = 1
+uploadspeed = 38400
+
