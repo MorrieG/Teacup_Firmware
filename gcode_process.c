@@ -24,7 +24,7 @@
 #include	"config_wrapper.h"
 #include	"home.h"
 #include "sd.h"
-
+#include "bed_leveling.h"
 
 /// the current tool
 uint8_t tool;
@@ -223,6 +223,62 @@ void process_gcode_command() {
 					home();
 				}
 				break;
+
+#ifdef BED_LEVELING
+      case 29:
+        //? --- G29: Bed leveling registration ---
+        //?
+        //? Example: G29 S1
+        //?
+        //? Registers the Z-offset for a specific point on the print bed.
+        //? In this case the current position is used as the registration
+        //? point, but a different position can be specified by including
+        //? the X, Y and Z coordinate values.
+        //?
+        //? Three points must be registered before the dynamic bed leveling
+        //? feature is activated. Once three points are registered, the bed
+        //? is mapped assuming a flat plane and Z-offsets are adjusted
+        //? automatically during movements to follow the mapped plane. The
+        //? adjusted position is not displayed to the client, for example
+        //? in M114 results.
+        //?
+        //? The S value controls the action as follows:
+        //?   S0 displays the current bed leveling status
+        //?   S1 registers a new point on the 3-point plane mapping
+        //?   S5 clears all registered points and disables dynamic leveling
+        //?
+        //?   G29 S1 X100 Y50 Z-0.3
+        //?
+        //? This command registers the specific point 100,50 => -0.3
+        //?
+        //?   G29 S1
+        //?
+        //? This command registers the current head position as a point in
+        //? the plane map.
+        //?
+
+        queue_wait();
+
+        if (next_target.seen_S) {
+          switch (next_target.S) {
+            case 5:   // reset bed leveling registration points
+              bed_level_reset();
+              break;
+
+            case 1:   // Register a new registration point
+              bed_level_register(next_target.target.axis[X], next_target.target.axis[Y], next_target.target.axis[Z]);
+              break;
+
+            case 0:   // Report leveling status
+              bed_level_report();
+              break;
+          }
+        }
+
+        // Restore position, ignoring any axes included in G29 cmd
+        next_target.target = startpoint;
+        break;
+#endif /* BED_LEVELING */
 
 			case 90:
 				//? --- G90: Set to Absolute Positioning ---
@@ -644,7 +700,12 @@ void process_gcode_command() {
 				//?  FIRMWARE_NAME:Teacup FIRMWARE_URL:http://github.com/traumflug/Teacup_Firmware/ PROTOCOL_VERSION:1.0 MACHINE_TYPE:Mendel EXTRUDER_COUNT:1 TEMP_SENSOR_COUNT:1 HEATER_COUNT:1
 				//?
 
-				sersendf_P(PSTR("FIRMWARE_NAME:Teacup FIRMWARE_URL:http://github.com/traumflug/Teacup_Firmware/ PROTOCOL_VERSION:1.0 MACHINE_TYPE:Mendel EXTRUDER_COUNT:%d TEMP_SENSOR_COUNT:%d HEATER_COUNT:%d\n"), 1, NUM_TEMP_SENSORS, NUM_HEATERS);
+        sersendf_P(PSTR("FIRMWARE_NAME:Teacup "
+                        "FIRMWARE_URL:http://github.com/traumflug/Teacup_Firmware/ "
+                        "PROTOCOL_VERSION:1.0 MACHINE_TYPE:Mendel EXTRUDER_COUNT:%d "
+                        "TEMP_SENSOR_COUNT:%d HEATER_COUNT:%d\n"
+                        "cap:AUTOREPORT_TEMP:%d\n"),
+                        1, NUM_TEMP_SENSORS, NUM_HEATERS, 1);
 				break;
 
 			case 116:
@@ -789,6 +850,35 @@ void process_gcode_command() {
 					temp_set(HEATER_BED, next_target.S);
 				#endif
 				break;
+
+      case 155:
+        //? --- M155: Report Temperature(s) Periodically ---
+        //?
+        //? Example: M155 Sn
+        //?
+        //? turns on periodic reporting of the temperatures of the current
+        //? extruder and the build base in degrees Celsius. The reporting
+        //? interval is given in seconds as the S parameter. Use S0 to disable
+        //? periodic temperature reporting. The reporting format is the same
+        //? as for M105, except there is no "ok" at the start of each report.
+        //? For example, the line sent to the host periodically looks like
+        //?
+        //? <tt>T:201 B:117</tt>
+        //?
+        //? Teacup supports an optional P parameter as a zero-based temperature
+        //? sensor index to address.
+        //?
+
+        // S<period-seconds> is required
+        if ( ! next_target.seen_S)
+          break;
+        #ifdef ENFORCE_ORDER
+          queue_wait();
+        #endif
+        if ( ! next_target.seen_P)
+          next_target.P = TEMP_SENSOR_none;
+        temp_periodic_config(next_target.S, next_target.P);
+        break;
 
       case 220:
         //? --- M220: Set speed factor override percentage ---

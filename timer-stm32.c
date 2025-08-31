@@ -5,7 +5,7 @@
   To be included from timer.c.
 */
 
-#if defined TEACUP_C_INCLUDE && defined __ARM_STM32F411__
+#if defined TEACUP_C_INCLUDE && defined __ARM_STM32__
 
 #include "cmsis-core_cm4.h"
 #include "clock.h"
@@ -74,9 +74,8 @@ void timer_init() {
   */
   RCC->APB1ENR |= RCC_APB1ENR_TIM5EN;             // Turn on TIM5 power.
 
-  TIM5->CCR1          = 0xFFFFFFFF;               // First timer should not occur at 0
-  TIM5->CR1          &= ~(0x03FF);                // clear register
-  TIM5->CR1          |= TIM_CR1_CEN;              // Enable counter.
+  TIM5->SR            = 0;                        // clear status register
+  TIM5->CR1           = TIM_CR1_CEN;              // Enable counter.
 
   NVIC_SetPriority(TIM5_IRQn,
   NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));           // Also highest priority.
@@ -226,4 +225,4 @@ void timer_stop() {
   SysTick->CTRL = 0;
 }
 
-#endif /* defined TEACUP_C_INCLUDE && defined __ARM_STM32F411__ */
+#endif /* defined TEACUP_C_INCLUDE && defined __ARM_STM32__ */

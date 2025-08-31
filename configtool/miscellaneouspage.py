@@ -1,4 +1,3 @@
-
 import wx
 from configtool.page import Page
 from configtool.data import reFloat
@@ -12,24 +11,28 @@ class MiscellaneousPage(wx.Panel, Page):
         self.id = idPg
         self.font = font
 
-        self.labels = {'USE_INTERNAL_PULLUPS': "Use Internal Pullups",
-                       'Z_AUTODISABLE': "Z Autodisable",
-                       'EECONFIG': "Enable EEPROM Storage",
-                       'BANG_BANG': "Enable",
-                       'BANG_BANG_ON': "On PWM Level:",
-                       'BANG_BANG_OFF': "Off PWM Level:",
-                       'REPORT_TARGET_TEMPS': "Report Target Temperatures",
-                       'MOVEBUFFER_SIZE': "Movebuffer Size:",
-                       'DC_EXTRUDER': "Heater:", 'DC_EXTRUDER_PWM': "PWM:",
-                       'USE_WATCHDOG': "Use the Watchdog Timer",
-                       'TH_COUNT': "Temperature History Size:",
-                       'FAST_PWM': "Fast PWM",
-                       'ENDSTOP_STEPS': "Endstop Steps:",
-                       'PID_SCALE': "PID Scaling Factor:",
-                       'TEMP_HYSTERESIS': "Temperature Hysteresis:",
-                       'TEMP_RESIDENCY_TIME': "Temperature Residency Time:",
-                       'TEMP_EWMA': "Temperature EWMA:",
-                       'HEATER_SANITY_CHECK': "Heater Sanity Check"}
+        self.labels = {
+            "USE_INTERNAL_PULLUPS": "Use Internal Pullups",
+            "BED_LEVELING": "Enable dynamic bed leveling",
+            "Z_AUTODISABLE": "Z Autodisable",
+            "EECONFIG": "Enable EEPROM Storage",
+            "BANG_BANG": "Enable",
+            "BANG_BANG_ON": "On PWM Level:",
+            "BANG_BANG_OFF": "Off PWM Level:",
+            "REPORT_TARGET_TEMPS": "Report Target Temperatures",
+            "MOVEBUFFER_SIZE": "Movebuffer Size:",
+            "DC_EXTRUDER": "Heater:",
+            "DC_EXTRUDER_PWM": "PWM:",
+            "USE_WATCHDOG": "Use the Watchdog Timer",
+            "TH_COUNT": "Temperature History Size:",
+            "FAST_PWM": "Fast PWM",
+            "ENDSTOP_STEPS": "Endstop Steps:",
+            "PID_SCALE": "PID Scaling Factor:",
+            "TEMP_HYSTERESIS": "Temperature Hysteresis:",
+            "TEMP_RESIDENCY_TIME": "Temperature Residency Time:",
+            "TEMP_EWMA": "Temperature EWMA:",
+            "HEATER_SANITY_CHECK": "Heater Sanity Check",
+        }
 
         self.heaterNameNone = "<none>"
         self.heaterNames = [self.heaterNameNone]
@@ -51,50 +54,54 @@ class MiscellaneousPage(wx.Panel, Page):
 
         labelWidth = 140
 
-        k = 'EECONFIG'
+        k = "EECONFIG"
         cb = self.addCheckBox(k, self.onCheckBox)
         sz.Add(cb, pos=(1, 1))
 
-        k = 'USE_INTERNAL_PULLUPS'
+        k = "USE_INTERNAL_PULLUPS"
         cb = self.addCheckBox(k, self.onCheckBox)
         sz.Add(cb, pos=(2, 1))
 
-        k = 'USE_WATCHDOG'
+        k = "USE_WATCHDOG"
         cb = self.addCheckBox(k, self.onCheckBox)
         sz.Add(cb, pos=(3, 1))
 
-        k = 'FAST_PWM'
+        k = "FAST_PWM"
         cb = self.addCheckBox(k, self.onCheckBox)
         sz.Add(cb, pos=(4, 1))
 
-        k = 'HEATER_SANITY_CHECK'
+        k = "HEATER_SANITY_CHECK"
         cb = self.addCheckBox(k, self.onCheckBox)
         sz.Add(cb, pos=(5, 1))
 
-        k = 'REPORT_TARGET_TEMPS'
+        k = "REPORT_TARGET_TEMPS"
         cb = self.addCheckBox(k, self.onCheckBox)
         sz.Add(cb, pos=(6, 1))
 
-        k = 'Z_AUTODISABLE'
+        k = "Z_AUTODISABLE"
         cb = self.addCheckBox(k, self.onCheckBox)
         sz.Add(cb, pos=(7, 1))
+
+        k = "BED_LEVELING"
+        cb = self.addCheckBox(k, self.onCheckBox)
+        sz.Add(cb, pos=(8, 1))
 
         b = wx.StaticBox(self, wx.ID_ANY, "BANG BANG Bed Control")
         b.SetFont(font)
         sbox = wx.StaticBoxSizer(b, wx.VERTICAL)
         sbox.Add((5, 5))
 
-        k = 'BANG_BANG'
+        k = "BANG_BANG"
         cb = self.addCheckBox(k, self.onCheckBox)
         sbox.Add(cb, 1, wx.LEFT, 60)
         sbox.Add((5, 20))
 
-        k = 'BANG_BANG_ON'
+        k = "BANG_BANG_ON"
         tc = self.addTextCtrl(k, 100, self.onTextCtrlInteger)
         sbox.Add(tc)
         sbox.Add((5, 5))
 
-        k = 'BANG_BANG_OFF'
+        k = "BANG_BANG_OFF"
         tc = self.addTextCtrl(k, 100, self.onTextCtrlInteger)
         sbox.Add(tc)
         sbox.Add((5, 5))
@@ -106,12 +113,12 @@ class MiscellaneousPage(wx.Panel, Page):
         sbox = wx.StaticBoxSizer(b, wx.VERTICAL)
         sbox.Add((5, 5))
 
-        k = 'DC_EXTRUDER'
+        k = "DC_EXTRUDER"
         ch = self.addChoice(k, self.heaterNames, 0, 60, self.onChoice)
         sbox.Add(ch)
         sbox.Add((5, 5))
 
-        k = 'DC_EXTRUDER_PWM'
+        k = "DC_EXTRUDER_PWM"
         tc = self.addTextCtrl(k, 60, self.onTextCtrlInteger)
         sbox.Add(tc)
         sbox.Add((5, 5))
@@ -120,31 +127,31 @@ class MiscellaneousPage(wx.Panel, Page):
 
         labelWidth = 190
 
-        k = 'MOVEBUFFER_SIZE'
+        k = "MOVEBUFFER_SIZE"
         tc = self.addTextCtrl(k, labelWidth, self.onTextCtrlInteger)
         sz.Add(tc, pos=(1, 5))
 
-        k = 'TH_COUNT'
+        k = "TH_COUNT"
         tc = self.addTextCtrl(k, labelWidth, self.onTextCtrlInteger)
         sz.Add(tc, pos=(2, 5))
 
-        k = 'ENDSTOP_STEPS'
+        k = "ENDSTOP_STEPS"
         tc = self.addTextCtrl(k, labelWidth, self.onTextCtrlInteger)
         sz.Add(tc, pos=(3, 5))
 
-        k = 'PID_SCALE'
+        k = "PID_SCALE"
         tc = self.addTextCtrl(k, labelWidth, self.onTextCtrlInteger)
         sz.Add(tc, pos=(4, 5))
 
-        k = 'TEMP_HYSTERESIS'
+        k = "TEMP_HYSTERESIS"
         tc = self.addTextCtrl(k, labelWidth, self.onTextCtrlInteger)
         sz.Add(tc, pos=(6, 5))
 
-        k = 'TEMP_RESIDENCY_TIME'
+        k = "TEMP_RESIDENCY_TIME"
         tc = self.addTextCtrl(k, labelWidth, self.onTextCtrlInteger)
         sz.Add(tc, pos=(7, 5))
 
-        k = 'TEMP_EWMA'
+        k = "TEMP_EWMA"
         tc = self.addTextCtrl(k, labelWidth, self.onTextCtrlInteger)
         sz.Add(tc, pos=(8, 5))
 
@@ -152,7 +159,7 @@ class MiscellaneousPage(wx.Panel, Page):
         self.enableAll(False)
 
     def setHeaters(self, hlist):
-        k = 'DC_EXTRUDER'
+        k = "DC_EXTRUDER"
         v = self.choices[k].GetSelection()
         currentChoice = self.heaterNames[v]
         self.boardHeaters = [s[0] for s in hlist]
@@ -169,9 +176,10 @@ class MiscellaneousPage(wx.Panel, Page):
             dlg = wx.MessageDialog(
                 self,
                 "Printer: Miscellaneous tab:\nDC Extruder heater "
-                "\"%s\" not defined for this board. Please check."
-                % currentChoice, "Warning",
-                wx.OK + wx.ICON_WARNING)
+                '"%s" not defined for this board. Please check.' % currentChoice,
+                "Warning",
+                wx.OK + wx.ICON_WARNING,
+            )
 
             dlg.ShowModal()
             dlg.Destroy()
@@ -179,9 +187,9 @@ class MiscellaneousPage(wx.Panel, Page):
         self.choices[k].SetSelection(v)
 
     def setOriginalHeater(self, h):
-        k = 'DC_EXTRUDER'
+        k = "DC_EXTRUDER"
         if h and h.startswith("HEATER_"):
-            hname = h[len("HEATER_"):]
+            hname = h[len("HEATER_") :]
         else:
             hname = h
         if hname and len(self.boardHeaters) != 0:
@@ -189,9 +197,11 @@ class MiscellaneousPage(wx.Panel, Page):
                 dlg = wx.MessageDialog(
                     self,
                     "Printer: Miscellaneous tab:\nDC Extruder "
-                    "heater \"%s\" not defined for this board. "
-                    "Please check."
-                    % hname, "Warning", wx.OK + wx.ICON_WARNING)
+                    'heater "%s" not defined for this board. '
+                    "Please check." % hname,
+                    "Warning",
+                    wx.OK + wx.ICON_WARNING,
+                )
 
                 dlg.ShowModal()
                 dlg.Destroy()
@@ -216,7 +226,7 @@ class MiscellaneousPage(wx.Panel, Page):
     def getValues(self):
         result = Page.getValues(self)
 
-        k = 'DC_EXTRUDER'
+        k = "DC_EXTRUDER"
         s = self.choices[k].GetSelection()
         v = self.choices[k].GetString(s)
         if v == self.heaterNameNone:

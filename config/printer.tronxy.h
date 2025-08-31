@@ -112,9 +112,8 @@
 #define E_ABSOLUTE
 
 /** \def HOMING_OPT
-
-  Options for homing movements. 'none' means no movement at all. For each
-  option XXX, a function home_XXX() has to exist, typically in home.c/.h.
+  Options for homing movements a user should be able to choose from in configtool. All
+  commented out.
 */
 //#define HOMING_OPT none
 //#define HOMING_OPT x_negative
@@ -125,15 +124,10 @@
 //#define HOMING_OPT z_positive
 
 /** \def DEFINE_HOMING
-
-  Order (and number) of homing movements.
+  Order (and number) of homing movements. Up to 4 homing steps are allowed.
+  If you don't need even one axis just DEFINE_HOMING(none).
 */
-#ifndef DEFINE_HOMING
-  #define DEFINE_HOMING(...)
-#endif
-//DEFINE_HOMING_START
-DEFINE_HOMING(x_negative, y_negative, z_negative, none)
-//DEFINE_HOMING_END
+DEFINE_HOMING(x_negative, y_negative, z_negative)
 
 /** \def ACCELERATION_REPRAP ACCELERATION_RAMPING ACCELERATION_TEMPORAL
   Choose optionally one of ACCELERATION_REPRAP, ACCELERATION_RAMPING or
@@ -184,8 +178,16 @@ DEFINE_HOMING(x_negative, y_negative, z_negative, none)
 */
 #define MAX_JERK_X               200
 #define MAX_JERK_Y               200
-#define MAX_JERK_Z               0
+#define MAX_JERK_Z               20
 #define MAX_JERK_E               200
+
+/** \def BED_LEVELING
+  Define this to enable dynamic bed leveling using the G29 command and
+  3-point planar bed mapping. Allows the printer to compensate dynamically
+  for a print bed which is flat but is not quite level.
+  Enabling bed-leveling requires about 2400 bytes of flash memory.
+*/
+//#define BED_LEVELING
 
 
 /***************************************************************************\

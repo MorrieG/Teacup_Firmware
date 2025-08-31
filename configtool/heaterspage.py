@@ -1,4 +1,3 @@
-
 import wx
 from configtool.page import Page
 from configtool.data import pinNames, BSIZESMALL
@@ -14,7 +13,7 @@ class HeatersPage(wx.Panel, Page):
         self.font = font
         self.id = idPg
 
-        self.labels = {'FORCE_SOFTWARE_PWM': "Force software PWM"}
+        self.labels = {"FORCE_SOFTWARE_PWM": "Force software PWM"}
 
         sz = wx.GridBagSizer()
         sz.Add((30, 30), pos=(0, 0))
@@ -26,7 +25,7 @@ class HeatersPage(wx.Panel, Page):
         sz.Add(self.lb, pos=(1, 1))
         sz.Add((20, 20), pos=(1, 2))
 
-        k = 'FORCE_SOFTWARE_PWM'
+        k = "FORCE_SOFTWARE_PWM"
         cb = self.addCheckBox(k, self.onCheckBox)
 
         sz.Add(cb, pos=(2, 1))
@@ -58,8 +57,7 @@ class HeatersPage(wx.Panel, Page):
         self.bDelete.SetFont(font)
         self.bDelete.Enable(False)
         self.Bind(wx.EVT_BUTTON, self.doDelete, self.bDelete)
-        self.bDelete.SetToolTip("Remove the selected heater from the "
-                                "configuration.")
+        self.bDelete.SetToolTip("Remove the selected heater from the " "configuration.")
         bsz.Add(self.bDelete)
 
         sz.Add(bsz, pos=(1, 3))
@@ -124,8 +122,16 @@ class HeatersPage(wx.Panel, Page):
         h = self.heaters[self.selection]
 
         dlg = AddHeaterDlg(
-            self, nm, [h[1]] + self.getFreePins(), self.font,
-            name=h[0], pin=h[1], invert=h[2], pwm=h[3], max_pwm=h[4])
+            self,
+            nm,
+            [h[1]] + self.getFreePins(),
+            self.font,
+            name=h[0],
+            pin=h[1],
+            invert=h[2],
+            pwm=h[3],
+            max_pwm=h[4],
+        )
         rc = dlg.ShowModal()
         if rc == wx.ID_OK:
             ht = dlg.getValues()
@@ -176,15 +182,15 @@ class HeatersPage(wx.Panel, Page):
 
     def validateTable(self):
         self.lb.setTableValidity(True)
-        self.setFieldValidity('HEATERLIST', True)
+        self.setFieldValidity("HEATERLIST", True)
         for i in range(len(self.heaters)):
             if self.heaters[i][1] not in self.validPins:
                 self.lb.setRowValidity(i, False)
-                self.setFieldValidity('HEATERLIST', False)
+                self.setFieldValidity("HEATERLIST", False)
 
     def setHelpText(self, ht):
         Page.setHelpText(self, ht)
 
-        k = 'DEFINE_HEATER'
+        k = "DEFINE_HEATER"
         if k in ht.keys():
             self.bAdd.SetToolTip(ht[k])

@@ -1,4 +1,3 @@
-
 import wx
 
 
@@ -6,10 +5,13 @@ class SensorList(wx.ListCtrl):
     def __init__(self, parent, font):
         self.parent = parent
         self.currentItem = None
-        wx.ListCtrl.__init__(self, parent, wx.ID_ANY,
-                             size=(105 + 105 + 55 + 280 + 4, 100),
-                             style=wx.LC_REPORT | wx.LC_VIRTUAL |
-                             wx.LC_HRULES | wx.LC_VRULES)
+        wx.ListCtrl.__init__(
+            self,
+            parent,
+            wx.ID_ANY,
+            size=(105 + 105 + 55 + 280 + 4, 100),
+            style=wx.LC_REPORT | wx.LC_VIRTUAL | wx.LC_HRULES | wx.LC_VRULES,
+        )
 
         self.SetFont(font)
 
@@ -54,7 +56,7 @@ class SensorList(wx.ListCtrl):
             self.setRowValidity(i, flag)
 
     def OnItemSelected(self, event):
-        self.currentItem = event.Index
+        self.currentItem = event.GetIndex()
         self.parent.setItemSelected(self.currentItem)
 
     def OnItemDeselected(self, event):

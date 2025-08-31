@@ -92,11 +92,11 @@
     Sane values: according to printer build room size
     Valid range: -1000.0 to 1000.0
 */
-#define X_MIN                    45
-#define X_MAX                    300
+#define X_MIN                    0
+#define X_MAX                    412
 
-#define Y_MIN                    45
-#define Y_MAX                    300
+#define Y_MIN                    0
+#define Y_MAX                    412
 
 #define Z_MIN                    0.0
 #define Z_MAX                    0
@@ -204,7 +204,7 @@ DEFINE_HOMING(('Step 1:', True), ('Step 2:', True), ('Step 3:', True), ('Step 4:
   One can't use USE_INTERNAL_PULLUPS and USE_INTERNAL_PULLDOWNS at the same
   time, of course.
 */
-//#define USE_INTERNAL_PULLUPS
+#define USE_INTERNAL_PULLUPS
 
 /** \def USE_INTERNAL_PULLDOWNS
 

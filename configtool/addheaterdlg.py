@@ -1,30 +1,39 @@
-
 import wx
 from configtool.data import BSIZESMALL, offsetChLabel, offsetTcLabel
 
 
 class AddHeaterDlg(wx.Dialog):
-    def __init__(self, parent, names, pins, font,
-                 name="", pin="", invert="0", pwm="1", max_pwm="100"):
-        wx.Dialog.__init__(self, parent, wx.ID_ANY,
-                           "Add heater", size=(400, 204))
+    def __init__(
+        self,
+        parent,
+        names,
+        pins,
+        font,
+        name="",
+        pin="",
+        invert="0",
+        pwm="1",
+        max_pwm="100",
+    ):
+        wx.Dialog.__init__(self, parent, wx.ID_ANY, "Add heater", size=(400, 204))
         self.SetFont(font)
         self.Bind(wx.EVT_CLOSE, self.onCancel)
 
         self.names = names
         self.choices = pins
 
-        self.nameValid = (name != "")
-        self.maxPWMValid = (max_pwm != "")
-        self.pwmValid = (pwm != "")
+        self.nameValid = name != ""
+        self.maxPWMValid = max_pwm != ""
+        self.pwmValid = pwm != ""
 
         sz = wx.BoxSizer(wx.VERTICAL)
         gsz = wx.GridBagSizer()
         gsz.Add((20, 20), pos=(0, 0))
 
         lsz = wx.BoxSizer(wx.HORIZONTAL)
-        st = wx.StaticText(self, wx.ID_ANY, "Heater Name:", size=(80, -1),
-                           style=wx.ALIGN_RIGHT)
+        st = wx.StaticText(
+            self, wx.ID_ANY, "Heater Name:", size=(80, -1), style=wx.ALIGN_RIGHT
+        )
         st.SetFont(font)
         lsz.Add(st, 1, wx.TOP, offsetTcLabel)
 
@@ -39,8 +48,7 @@ class AddHeaterDlg(wx.Dialog):
         gsz.Add(lsz, pos=(1, 1))
 
         lsz = wx.BoxSizer(wx.HORIZONTAL)
-        st = wx.StaticText(self, wx.ID_ANY, "Pin:", size=(80, -1),
-                           style=wx.ALIGN_RIGHT)
+        st = wx.StaticText(self, wx.ID_ANY, "Pin:", size=(80, -1), style=wx.ALIGN_RIGHT)
         st.SetFont(font)
         lsz.Add(st, 1, wx.TOP, offsetChLabel)
 
@@ -58,8 +66,9 @@ class AddHeaterDlg(wx.Dialog):
         gsz.Add(lsz, pos=(3, 1))
 
         lsz = wx.BoxSizer(wx.HORIZONTAL)
-        st = wx.StaticText(self, wx.ID_ANY, "Max PWM:", size=(80, -1),
-                           style=wx.ALIGN_RIGHT)
+        st = wx.StaticText(
+            self, wx.ID_ANY, "Max PWM:", size=(80, -1), style=wx.ALIGN_RIGHT
+        )
         st.SetFont(font)
         lsz.Add(st, 1, wx.TOP, offsetChLabel)
 
@@ -67,9 +76,11 @@ class AddHeaterDlg(wx.Dialog):
         self.tcMaxPWM.SetFont(font)
         self.tcMaxPWM.Bind(wx.EVT_TEXT, self.onMaxPWM)
         lsz.Add(self.tcMaxPWM)
-        self.tcMaxPWM.SetToolTip("Enter max. PWM value in [%]. Typically \n"
-                                 "between 40 and 100. Standard is 100.\n"
-                                 "Valid values 1 to 100.")
+        self.tcMaxPWM.SetToolTip(
+            "Enter max. PWM value in [%]. Typically \n"
+            "between 40 and 100. Standard is 100.\n"
+            "Valid values 1 to 100."
+        )
 
         gsz.Add(lsz, pos=(5, 1))
 
@@ -81,8 +92,7 @@ class AddHeaterDlg(wx.Dialog):
         gsz.Add(self.cbInv, pos=(3, 3))
 
         lsz = wx.BoxSizer(wx.HORIZONTAL)
-        st = wx.StaticText(self, wx.ID_ANY, "PWM:", size=(60, -1),
-                           style=wx.ALIGN_RIGHT)
+        st = wx.StaticText(self, wx.ID_ANY, "PWM:", size=(60, -1), style=wx.ALIGN_RIGHT)
         st.SetFont(font)
         lsz.Add(st, 1, wx.TOP, offsetChLabel)
 
@@ -90,11 +100,13 @@ class AddHeaterDlg(wx.Dialog):
         self.tcPwm.SetFont(font)
         self.tcPwm.Bind(wx.EVT_TEXT, self.onPWM)
         lsz.Add(self.tcPwm)
-        self.tcPwm.SetToolTip("Use Pulse Width Modulation. "
-                              "Hardware PWM if available or "
-                              "Software PWM. When FORCE_SOFTWARE_PWM "
-                              "is set, always software PWM for 1 and "
-                              "hardware PWM for >= 2.")
+        self.tcPwm.SetToolTip(
+            "Use Pulse Width Modulation. "
+            "Hardware PWM if available or "
+            "Software PWM. When FORCE_SOFTWARE_PWM "
+            "is set, always software PWM for 1 and "
+            "hardware PWM for >= 2."
+        )
 
         gsz.Add((50, 15), pos=(1, 2))
         gsz.Add(lsz, pos=(1, 3))
@@ -136,8 +148,7 @@ class AddHeaterDlg(wx.Dialog):
                 self.nameValid = True
 
         if self.nameValid:
-            tc.SetBackgroundColour(
-                wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
+            tc.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
         else:
             tc.SetBackgroundColour("pink")
         tc.Refresh()
@@ -160,8 +171,7 @@ class AddHeaterDlg(wx.Dialog):
                 self.maxPWMValid = False
 
         if self.maxPWMValid:
-            tc.SetBackgroundColour(
-                wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
+            tc.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
         else:
             tc.SetBackgroundColour("pink")
         tc.Refresh()
@@ -182,8 +192,7 @@ class AddHeaterDlg(wx.Dialog):
                 self.pwmValid = False
 
         if self.pwmValid:
-            tc.SetBackgroundColour(
-                wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
+            tc.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
         else:
             tc.SetBackgroundColour("pink")
         tc.Refresh()
@@ -193,7 +202,7 @@ class AddHeaterDlg(wx.Dialog):
             evt.Skip()
 
     def checkDlgValidity(self):
-        if (self.nameValid and self.maxPWMValid and self.pwmValid):
+        if self.nameValid and self.maxPWMValid and self.pwmValid:
             self.bSave.Enable(True)
         else:
             self.bSave.Enable(False)

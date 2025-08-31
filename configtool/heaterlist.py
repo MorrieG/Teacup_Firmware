@@ -1,4 +1,3 @@
-
 import wx
 
 
@@ -7,10 +6,12 @@ class HeaterList(wx.ListCtrl):
         self.parent = parent
         self.currentItem = None
         wx.ListCtrl.__init__(
-            self, parent, wx.ID_ANY,
+            self,
+            parent,
+            wx.ID_ANY,
             size=(95 + 75 + 55 + 55 + 95 + 4, 100),
-            style=wx.LC_REPORT | wx.LC_VIRTUAL | wx.LC_HRULES |
-            wx.LC_VRULES)
+            style=wx.LC_REPORT | wx.LC_VIRTUAL | wx.LC_HRULES | wx.LC_VRULES,
+        )
         self.SetFont(font)
 
         self.valid = []
@@ -56,7 +57,7 @@ class HeaterList(wx.ListCtrl):
             self.setRowValidity(i, flag)
 
     def OnItemSelected(self, event):
-        self.currentItem = event.Index
+        self.currentItem = event.GetIndex()
         self.parent.setItemSelected(self.currentItem)
 
     def OnItemDeselected(self, event):

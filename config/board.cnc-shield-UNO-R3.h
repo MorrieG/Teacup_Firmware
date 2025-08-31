@@ -54,9 +54,9 @@
 #define X_MAX_PIN                DIO12
 #define X_ENABLE_PIN             DIO8
 //#define X_INVERT_DIR
-//#define X_INVERT_MIN
-//#define X_INVERT_MAX
-//#define X_INVERT_ENABLE
+#define X_INVERT_MIN
+#define X_INVERT_MAX
+#define X_INVERT_ENABLE
 
 #define Y_STEP_PIN               DIO3
 #define Y_DIR_PIN                DIO6
@@ -64,9 +64,9 @@
 #define Y_MAX_PIN                DIO13
 #define Y_ENABLE_PIN             DIO8
 //#define Y_INVERT_DIR
-//#define Y_INVERT_MIN
-//#define Y_INVERT_MAX
-//#define Y_INVERT_ENABLE
+#define Y_INVERT_MIN
+#define Y_INVERT_MAX
+#define Y_INVERT_ENABLE
 
 //#define Z_STEP_PIN               DIO4
 //#define Z_DIR_PIN                DIO7
@@ -88,7 +88,7 @@
 //#define PS_INVERT_ON
 //#define PS_MOSFET_PIN            xxxx
 #define STEPPER_ENABLE_PIN       DIO8
-//#define STEPPER_INVERT_ENABLE
+#define STEPPER_INVERT_ENABLE
 
 /** \def DEBUG_LED_PIN
 

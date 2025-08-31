@@ -1,18 +1,18 @@
-
 import wx.lib.newevent
-import threading
+
+try:
+    import thread as _thread
+except ImportError:
+    import _thread
 import shlex
 import subprocess
 import os
 import re
 from os.path import isfile, join
-from sys import platform, version_info
+from sys import platform
 
 if platform.startswith("win"):
-    if version_info.major >= 3:
-        from subprocess import STARTF_USESHOWWINDOW
-    else:
-        from _subprocess import STARTF_USESHOWWINDOW
+    from subprocess import STARTF_USESHOWWINDOW
 
 (scriptEvent, EVT_SCRIPT_UPDATE) = wx.lib.newevent.NewEvent()
 SCRIPT_RUNNING = 1
@@ -21,8 +21,8 @@ SCRIPT_CANCELLED = 3
 
 TOOLPATHS_INSIDE_ARDUINO = [
     "hardware/tools/avr/bin/",
-    "hardware/tools/"  # avrdude in Arduino 1.0.x
-]
+    "hardware/tools/",
+]  # avrdude in Arduino 1.0.x
 if platform.startswith("darwin"):
     # That's an OS property, the Applicaton Bundle hierarchy.
     pathsCopy = TOOLPATHS_INSIDE_ARDUINO
@@ -53,11 +53,11 @@ class ScriptTools:
                     cmdpathTry = os.path.join(cmdpathTry, dir)
                 cmdpathTry = os.path.join(cmdpathTry, baseCommand)
                 if os.path.exists(cmdpathTry):
-                    cmdpath = "\"" + cmdpathTry + "\""
+                    cmdpath = '"' + cmdpathTry + '"'
                     break
 
             if findConf:
-                confpath = cmdpath.strip("\"")
+                confpath = cmdpath.strip('"')
                 exepos = confpath.rfind(".exe")
                 if exepos >= 0:
                     confpath = confpath[0:exepos]
@@ -68,7 +68,7 @@ class ScriptTools:
                     confpath = os.path.join(confpath, "etc")
                     confpath = os.path.join(confpath, "avrdude.conf")
                 if os.path.exists(confpath):
-                    cmdpath += " -C \"" + confpath + "\""
+                    cmdpath += ' -C "' + confpath + '"'
 
         else:
             cmdpath = baseCommand
@@ -87,7 +87,7 @@ class ScriptThread:
     def Start(self):
         self.running = True
         self.cancelled = False
-        threading._start_new_thread(self.Run, ())
+        _thread.start_new_thread(self.Run, ())
 
     def Stop(self):
         self.cancelled = True
@@ -103,39 +103,41 @@ class ScriptThread:
         for cmd in self.script:
             evt = scriptEvent(msg=cmd, state=SCRIPT_RUNNING)
             wx.PostEvent(self.win, evt)
-            if not platform.startswith("win"):
-                args = shlex.split(str(cmd))
-            else:
-                args = str(cmd)
-
+            args = shlex.split(str(cmd))
             try:
                 if platform.startswith("win"):
-                    p = subprocess.Popen(args, stderr=subprocess.STDOUT,
-                                         stdout=subprocess.PIPE)  # ,
-#                                         startupinfo=startupinfo)
+                    p = subprocess.Popen(
+                        args,
+                        stderr=subprocess.STDOUT,
+                        stdout=subprocess.PIPE,
+                        startupinfo=startupinfo,
+                    )
                 else:
-                    p = subprocess.Popen(args, stderr=subprocess.STDOUT,
-                                         stdout=subprocess.PIPE)
+                    p = subprocess.Popen(
+                        args, stderr=subprocess.STDOUT, stdout=subprocess.PIPE
+                    )
             except:
-                evt = scriptEvent(msg="Exception occurred trying to run\n\n%s"
-                                  % cmd, state=SCRIPT_CANCELLED)
+                evt = scriptEvent(
+                    msg="Exception occurred trying to run\n\n%s" % cmd,
+                    state=SCRIPT_CANCELLED,
+                )
                 wx.PostEvent(self.win, evt)
                 self.running = False
                 return
-            obuf = ''
+            obuf = ""
             while not self.cancelled:
-                o = p.stdout.read(1)
-                if o == b'':
+                o = p.stdout.read(1).decode("utf-8", "ignore")
+                if o == "":
                     break
-                if o == '\r' or o == '\n':
+                if o == "\r" or o == "\n":
                     if obuf.strip() != "":
                         evt = scriptEvent(msg=obuf, state=SCRIPT_RUNNING)
                         wx.PostEvent(self.win, evt)
-                    obuf = ''
+                    obuf = ""
                 elif ord(o) < 32:
                     pass
                 else:
-                    obuf += str(o)
+                    obuf += o
 
             if self.cancelled:
                 evt = scriptEvent(msg=None, state=SCRIPT_CANCELLED)
@@ -164,8 +166,13 @@ class ScriptThread:
 
 class Build(wx.Dialog):
     def __init__(self, parent, settings, f_cpu, cpu):
-        wx.Dialog.__init__(self, parent, wx.ID_ANY, "Build teacup",
-                           style=wx.RESIZE_BORDER + wx.DEFAULT_DIALOG_STYLE)
+        wx.Dialog.__init__(
+            self,
+            parent,
+            wx.ID_ANY,
+            "Build teacup",
+            style=wx.RESIZE_BORDER + wx.DEFAULT_DIALOG_STYLE,
+        )
         self.settings = settings
         self.SetFont(self.settings.font)
         self.root = self.settings.folder
@@ -180,11 +187,11 @@ class Build(wx.Dialog):
         sz = wx.BoxSizer(wx.VERTICAL)
         sz.Add((10, 10))
 
-        tc = wx.TextCtrl(self, wx.ID_ANY, size=(900, 300),
-                         style=wx.TE_READONLY + wx.TE_MULTILINE)
+        tc = wx.TextCtrl(
+            self, wx.ID_ANY, size=(900, 300), style=wx.TE_READONLY + wx.TE_MULTILINE
+        )
         sz.Add(tc, 1, wx.EXPAND)
-        f = wx.Font(8, wx.FONTFAMILY_MODERN, wx.FONTSTYLE_NORMAL,
-                    wx.FONTWEIGHT_BOLD)
+        f = wx.Font(8, wx.FONTFAMILY_MODERN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD)
         tc.SetFont(f)
         self.log = tc
 
@@ -228,7 +235,7 @@ class Build(wx.Dialog):
         self.script = []
         self.reportLines = []
         cmdpath = ScriptTools(self.settings).figureCommandPath("avr-objdump")
-        elfpath = "\"" + join(self.root, "build", "teacup.elf") + "\""
+        elfpath = '"' + join(self.root, "build", "teacup.elf") + '"'
         cmd = cmdpath + " -h " + elfpath
         self.script.append(cmd)
         self.Bind(EVT_SCRIPT_UPDATE, self.reportUpdate)
@@ -240,15 +247,18 @@ class Build(wx.Dialog):
         self.script = []
         cmdpath = ScriptTools(self.settings).figureCommandPath("avr-gcc")
 
-        cfiles = [f for f in os.listdir(self.root)
-                  if isfile(join(self.root, f)) and f.endswith(".c")]
+        cfiles = [
+            f
+            for f in os.listdir(self.root)
+            if isfile(join(self.root, f)) and f.endswith(".c")
+        ]
         for f in cfiles:
             basename = f[:-2]
             ofile = basename + ".o"
             alfile = basename + ".al"
-            opath = "\"" + join(self.root, "build", ofile) + "\""
-            alpath = "\"" + join(self.root, "build", alfile) + "\""
-            cpath = "\"" + join(self.root, f) + "\""
+            opath = '"' + join(self.root, "build", ofile) + '"'
+            alpath = '"' + join(self.root, "build", alfile) + '"'
+            cpath = '"' + join(self.root, f) + '"'
 
             opts = self.settings.cflags
             opts = opts.replace("%ALNAME%", alpath)
@@ -266,28 +276,38 @@ class Build(wx.Dialog):
         # Work around a problem of avr-ld.exe coming with Arduino 1.6.4 for
         # Windows. Without this it always drops this error message:
         #   collect2.exe: error: ld returned 5 exit status 255
-        # Just enabling verbose messages allows ld.exe to complete
-        # without failure.
+        # Just enabling verbose messages allows ld.exe to complete without failure.
         if platform.startswith("win"):
             cmdpath += " -Wl,-V"
 
-        ofiles = ["\"" + join(self.root, "build", f) + "\""
-                  for f in os.listdir(join(self.root, "build"))
-                  if isfile(join(self.root, "build", f)) and f.endswith(".o")]
+        ofiles = [
+            '"' + join(self.root, "build", f) + '"'
+            for f in os.listdir(join(self.root, "build"))
+            if isfile(join(self.root, "build", f)) and f.endswith(".o")
+        ]
         opath = " ".join(ofiles)
-        elfpath = "\"" + join(self.root, "build", "teacup.elf") + "\""
-        hexpath = "\"" + join(self.root, "teacup.hex") + "\""
+        elfpath = '"' + join(self.root, "build", "teacup.elf") + '"'
+        hexpath = '"' + join(self.root, "teacup.hex") + '"'
         opts = self.settings.cflags
         opts = opts.replace("%ALNAME%", "teacup.elf")
         opts = opts.replace("%F_CPU%", self.f_cpu)
         opts = opts.replace("%CPU%", self.cpu)
-        cmd = cmdpath + " " + self.settings.ldflags + " " + opts + " -o " + \
-            elfpath + " " + opath + " -lm"
+        cmd = (
+            cmdpath
+            + " "
+            + self.settings.ldflags
+            + " "
+            + opts
+            + " -o "
+            + elfpath
+            + " "
+            + opath
+            + " -lm"
+        )
         self.script.append(cmd)
 
         cmdpath = ScriptTools(self.settings).figureCommandPath("avr-objcopy")
-        cmd = cmdpath + " " + self.settings.objcopyflags + " " + elfpath + \
-            " " + hexpath
+        cmd = cmdpath + " " + self.settings.objcopyflags + " " + elfpath + " " + hexpath
         self.script.append(cmd)
 
     def compileUpdate(self, evt):
@@ -338,20 +358,26 @@ class Build(wx.Dialog):
     def formatReportLine(self, m, name, v168, v328, v644, v1280):
         t = m.groups()
         v = int(t[0], 16)
-        self.log.AppendText(("%12s:  %6d bytes   %6.2f%%   %6.2f%%"
-                             "   %6.2f%%   %6.2f%%\n") %
-                            (name, v, v / float(v168 * 1024) * 100.0,
-                             v / float(v328 * 1024) * 100.0,
-                             v / float(v644 * 1024) * 100.0,
-                             v / float(v1280 * 1024) * 100.0))
+        self.log.AppendText(
+            ("%12s:  %6d bytes   %6.2f%%   %6.2f%%" "   %6.2f%%   %6.2f%%\n")
+            % (
+                name,
+                v,
+                v / float(v168 * 1024) * 100.0,
+                v / float(v328 * 1024) * 100.0,
+                v / float(v644 * 1024) * 100.0,
+                v / float(v1280 * 1024) * 100.0,
+            )
+        )
 
     def formatReport(self):
         reText = re.compile("\.text\s+([0-9a-f]+)")
         reBss = re.compile("\.bss\s+([0-9a-f]+)")
         reEEProm = re.compile("\.eeprom\s+([0-9a-f]+)")
 
-        self.log.AppendText("\n                   ATmega...     '168   '328(P)"
-                            "   '644(P)     '1280\n")
+        self.log.AppendText(
+            "\n                   ATmega...     '168   '328(P)" "   '644(P)     '1280\n"
+        )
         for l in self.reportLines:
             m = reText.search(l)
             if m:
@@ -367,10 +393,12 @@ class Build(wx.Dialog):
 
     def onExit(self, evt):
         if self.active:
-            dlg = wx.MessageDialog(self, "Are you sure you want to cancel "
-                                   "building?", "Build active",
-                                   wx.YES_NO | wx.NO_DEFAULT |
-                                   wx.ICON_INFORMATION)
+            dlg = wx.MessageDialog(
+                self,
+                "Are you sure you want to cancel building?",
+                "Build active",
+                wx.YES_NO | wx.NO_DEFAULT | wx.ICON_INFORMATION,
+            )
             rc = dlg.ShowModal()
             dlg.Destroy()
 
@@ -385,8 +413,13 @@ class Build(wx.Dialog):
 
 class Upload(wx.Dialog):
     def __init__(self, parent, settings, f_cpu, cpu):
-        wx.Dialog.__init__(self, parent, wx.ID_ANY, "Upload teacup",
-                           style=wx.RESIZE_BORDER + wx.DEFAULT_DIALOG_STYLE)
+        wx.Dialog.__init__(
+            self,
+            parent,
+            wx.ID_ANY,
+            "Upload teacup",
+            style=wx.RESIZE_BORDER + wx.DEFAULT_DIALOG_STYLE,
+        )
         self.settings = settings
         self.SetFont(self.settings.font)
         self.root = self.settings.folder
@@ -402,11 +435,11 @@ class Upload(wx.Dialog):
         sz = wx.BoxSizer(wx.VERTICAL)
         sz.Add((10, 10))
 
-        tc = wx.TextCtrl(self, wx.ID_ANY, size=(900, 300),
-                         style=wx.TE_READONLY + wx.TE_MULTILINE)
+        tc = wx.TextCtrl(
+            self, wx.ID_ANY, size=(900, 300), style=wx.TE_READONLY + wx.TE_MULTILINE
+        )
         sz.Add(tc, 1, wx.EXPAND)
-        f = wx.Font(8, wx.FONTFAMILY_MODERN, wx.FONTSTYLE_NORMAL,
-                    wx.FONTWEIGHT_BOLD)
+        f = wx.Font(8, wx.FONTFAMILY_MODERN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD)
         tc.SetFont(f)
         self.log = tc
 
@@ -430,11 +463,16 @@ class Upload(wx.Dialog):
     def generateUploadScript(self):
         self.script = []
         cmdpath = ScriptTools(self.settings).figureCommandPath("avrdude")
-        hexpath = "\"" + join(self.root, "teacup.hex") + "\""
+        hexpath = '"' + join(self.root, "teacup.hex") + '"'
 
-        cmd = cmdpath + " -c %s %s -b %s -p %s -P %s -U flash:w:%s:i" % \
-            (self.settings.programmer, self.settings.programflags, self.baud,
-             self.cpu, self.settings.port, hexpath)
+        cmd = cmdpath + " -c %s %s -b %s -p %s -P %s -U flash:w:%s:i" % (
+            self.settings.programmer,
+            self.settings.programflags,
+            self.baud,
+            self.cpu,
+            self.settings.port,
+            hexpath,
+        )
         self.script.append(cmd)
 
     def uploadUpdate(self, evt):
@@ -458,10 +496,12 @@ class Upload(wx.Dialog):
 
     def onExit(self, evt):
         if self.active:
-            dlg = wx.MessageDialog(self, "Are you sure you want to cancel "
-                                   "upload?", "Upload active", wx.YES_NO |
-                                   wx.NO_DEFAULT |
-                                   wx.ICON_INFORMATION)
+            dlg = wx.MessageDialog(
+                self,
+                "Are you sure you want to cancel upload?",
+                "Upload active",
+                wx.YES_NO | wx.NO_DEFAULT | wx.ICON_INFORMATION,
+            )
             rc = dlg.ShowModal()
             dlg.Destroy()
 

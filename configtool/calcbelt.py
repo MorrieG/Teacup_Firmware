@@ -1,14 +1,16 @@
-
 import wx
-from configtool.data import (BSIZESMALL, reFloat, reInteger, offsetChLabel,
-                             offsetTcLabel)
+from configtool.data import BSIZESMALL, reFloat, reInteger, offsetChLabel, offsetTcLabel
 
 
 class CalcBelt(wx.Dialog):
     def __init__(self, parent, font, cbUse):
-        wx.Dialog.__init__(self, parent, wx.ID_ANY,
-                           "Steps calculator for belt driven axes",
-                           size=(360, 300))
+        wx.Dialog.__init__(
+            self,
+            parent,
+            wx.ID_ANY,
+            "Steps calculator for belt driven axes",
+            size=(360, 300),
+        )
         self.SetFont(font)
         self.Bind(wx.EVT_CLOSE, self.onExit)
 
@@ -23,15 +25,17 @@ class CalcBelt(wx.Dialog):
 
         lsz = wx.BoxSizer(wx.HORIZONTAL)
         st = wx.StaticText(
-            self, wx.ID_ANY, "Step Angle:", size=(labelWidth, -1),
-            style=wx.ALIGN_RIGHT)
+            self, wx.ID_ANY, "Step Angle:", size=(labelWidth, -1), style=wx.ALIGN_RIGHT
+        )
         st.SetFont(font)
         lsz.Add(st, 1, wx.TOP, offsetChLabel)
         lsz.Add((5, 5))
 
         stepAngles = [
-            "1.8 (200 per revolution)", "0.9 (400 per revolution)",
-            "7.5 (48 per revolution)"]
+            "1.8 (200 per revolution)",
+            "0.9 (400 per revolution)",
+            "7.5 (48 per revolution)",
+        ]
         self.stepAngleValues = [200, 400, 48]
         tc = wx.Choice(self, wx.ID_ANY, choices=stepAngles)
         tc.SetFont(font)
@@ -45,33 +49,52 @@ class CalcBelt(wx.Dialog):
         sz.Add((10, 10))
 
         lsz = wx.BoxSizer(wx.HORIZONTAL)
-        st = wx.StaticText(self, wx.ID_ANY, "Microstepping:",
-                           size=(labelWidth, -1), style=wx.ALIGN_RIGHT)
+        st = wx.StaticText(
+            self,
+            wx.ID_ANY,
+            "Microstepping:",
+            size=(labelWidth, -1),
+            style=wx.ALIGN_RIGHT,
+        )
         st.SetFont(font)
         lsz.Add(st, 1, wx.TOP, offsetChLabel)
         lsz.Add((5, 5))
 
         microStepping = [
-            "1 - full step", "1/2 - half step", "1/4 - quarter step",
-            "1/8", "1/16", "1/32", "1/64", "1/128"]
+            "1 - full step",
+            "1/2 - half step",
+            "1/4 - quarter step",
+            "1/8",
+            "1/16",
+            "1/32",
+            "1/64",
+            "1/128",
+        ]
         self.microSteppingValues = [1, 2, 4, 8, 16, 32, 64, 128]
         tc = wx.Choice(self, wx.ID_ANY, choices=microStepping)
         tc.SetFont(font)
         tc.Bind(wx.EVT_CHOICE, self.onChoice)
         tc.SetSelection(4)
         lsz.Add(tc)
-        tc.SetToolTip("Microstepping. Most boards allow to change this by "
-                      "setting jumpers. The value here must match the "
-                      "setting on the board in conjunction with the type "
-                      "of stepper driver chip.")
+        tc.SetToolTip(
+            "Microstepping. Most boards allow to change this by "
+            "setting jumpers. The value here must match the "
+            "setting on the board in conjunction with the type "
+            "of stepper driver chip."
+        )
         self.tcMicroStepping = tc
 
         sz.Add(lsz)
         sz.Add((10, 10))
 
         lsz = wx.BoxSizer(wx.HORIZONTAL)
-        st = wx.StaticText(self, wx.ID_ANY, "Belt Pitch (in mm):",
-                           size=(labelWidth, -1), style=wx.ALIGN_RIGHT)
+        st = wx.StaticText(
+            self,
+            wx.ID_ANY,
+            "Belt Pitch (in mm):",
+            size=(labelWidth, -1),
+            style=wx.ALIGN_RIGHT,
+        )
         st.SetFont(font)
         lsz.Add(st, 1, wx.TOP, offsetTcLabel)
         lsz.Add((5, 5))
@@ -85,9 +108,15 @@ class CalcBelt(wx.Dialog):
 
         lsz.Add((5, 5))
 
-        beltPresets = ["-", "2mm Pitch (GT2)", "MXL Pitch (2.03mm)",
-                       "T2.5 (2.5mm)", "3mm Pitch (GT2, HTD)",
-                       "5mm Pitch (T5, GTD, HTD)", "0.2\" XL belt (5.08mm)"]
+        beltPresets = [
+            "-",
+            "2mm Pitch (GT2)",
+            "MXL Pitch (2.03mm)",
+            "T2.5 (2.5mm)",
+            "3mm Pitch (GT2, HTD)",
+            "5mm Pitch (T5, GTD, HTD)",
+            '0.2" XL belt (5.08mm)',
+        ]
         self.beltPresetValues = [-1, 2.0, 2.03, 2.5, 3.0, 5.0, 5.08]
         tc = wx.Choice(self, wx.ID_ANY, choices=beltPresets)
         tc.SetFont(font)
@@ -101,8 +130,13 @@ class CalcBelt(wx.Dialog):
         sz.Add((10, 10))
 
         lsz = wx.BoxSizer(wx.HORIZONTAL)
-        st = wx.StaticText(self, wx.ID_ANY, "Pulley Teeth Count:",
-                           size=(labelWidth, -1), style=wx.ALIGN_RIGHT)
+        st = wx.StaticText(
+            self,
+            wx.ID_ANY,
+            "Pulley Teeth Count:",
+            size=(labelWidth, -1),
+            style=wx.ALIGN_RIGHT,
+        )
         st.SetFont(font)
         lsz.Add(st, 1, wx.TOP, offsetTcLabel)
         lsz.Add((5, 5))
@@ -118,14 +152,14 @@ class CalcBelt(wx.Dialog):
         sz.Add((30, 30))
 
         lsz = wx.BoxSizer(wx.HORIZONTAL)
-        st = wx.StaticText(self, wx.ID_ANY, "Result:", size=(labelWidth, -1),
-                           style=wx.ALIGN_RIGHT)
+        st = wx.StaticText(
+            self, wx.ID_ANY, "Result:", size=(labelWidth, -1), style=wx.ALIGN_RIGHT
+        )
         st.SetFont(font)
         lsz.Add(st)
         lsz.Add((5, 5))
 
-        tc = wx.StaticText(self, wx.ID_ANY, "", size=(260, -1),
-                           style=wx.ALIGN_LEFT)
+        tc = wx.StaticText(self, wx.ID_ANY, "", size=(260, -1), style=wx.ALIGN_LEFT)
         tc.SetFont(font)
         lsz.Add(tc)
         self.tcResult = tc
@@ -133,14 +167,13 @@ class CalcBelt(wx.Dialog):
         sz.Add(lsz)
         lsz = wx.BoxSizer(wx.HORIZONTAL)
         st = wx.StaticText(
-            self, wx.ID_ANY, "Resolution:", size=(labelWidth, -1),
-            style=wx.ALIGN_RIGHT)
+            self, wx.ID_ANY, "Resolution:", size=(labelWidth, -1), style=wx.ALIGN_RIGHT
+        )
         st.SetFont(font)
         lsz.Add(st)
         lsz.Add((5, 5))
 
-        tc = wx.StaticText(self, wx.ID_ANY, "", size=(260, -1),
-                           style=wx.ALIGN_LEFT)
+        tc = wx.StaticText(self, wx.ID_ANY, "", size=(260, -1), style=wx.ALIGN_LEFT)
         tc.SetFont(font)
         lsz.Add(tc)
         self.tcResolution = tc
@@ -217,10 +250,8 @@ class CalcBelt(wx.Dialog):
         resultmm = steps / length
         self.result = int(resultmm * 1000.0)
 
-        self.tcResult.SetLabel("%d steps/m   (%.3f steps/mm)" %
-                               (self.result, resultmm))
-        self.tcResolution.SetLabel("%.3f micrometers" %
-                                   (length / steps * 1000.0))
+        self.tcResult.SetLabel("%d steps/m   (%.3f steps/mm)" % (self.result, resultmm))
+        self.tcResolution.SetLabel("%.3f micrometers" % (length / steps * 1000.0))
         self.enableUseButtons(True)
 
     def enableUseButtons(self, flag):
@@ -230,16 +261,16 @@ class CalcBelt(wx.Dialog):
         self.bUseForE.Enable(flag)
 
     def onUseForX(self, evt):
-        self.use('STEPS_PER_M_X', self.result)
+        self.use("STEPS_PER_M_X", self.result)
 
     def onUseForY(self, evt):
-        self.use('STEPS_PER_M_Y', self.result)
+        self.use("STEPS_PER_M_Y", self.result)
 
     def onUseForZ(self, evt):
-        self.use('STEPS_PER_M_Z', self.result)
+        self.use("STEPS_PER_M_Z", self.result)
 
     def onUseForE(self, evt):
-        self.use('STEPS_PER_M_E', self.result)
+        self.use("STEPS_PER_M_E", self.result)
 
     def onPresetChoice(self, evt):
         s = self.tcPresets.GetSelection()
@@ -269,8 +300,7 @@ class CalcBelt(wx.Dialog):
                 valid = False
 
         if valid:
-            tc.SetBackgroundColour(
-                wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
+            tc.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
         else:
             tc.SetBackgroundColour("pink")
         tc.Refresh()
@@ -290,8 +320,7 @@ class CalcBelt(wx.Dialog):
                 valid = False
 
         if valid:
-            tc.SetBackgroundColour(
-                wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
+            tc.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
         else:
             tc.SetBackgroundColour("pink")
         tc.Refresh()

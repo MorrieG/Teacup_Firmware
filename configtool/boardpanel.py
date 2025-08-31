@@ -1,20 +1,40 @@
-# -*- coding: utf-8 -*-
 import os
 import wx
 import re
 
 from sys import platform
 from configtool.decoration import Decoration
-from configtool.data import (defineValueFormat,
-                             defineBoolFormat, defineHeaterFormat,
-                             reHelpTextStart, reHelpTextEnd,
-                             reStartSensors, reEndSensors, reStartHeaters,
-                             reEndHeaters, reCandHeatPins, reCandThermPins,
-                             reCandProcessors, reCandCPUClocks, reFloatAttr,
-                             reDefine, reDefineBL, reDefQS, reDefQSm,
-                             reDefQSm2, reDefBool, reDefBoolBL, reDefHT,
-                             reDefTS, reDefTT, reSensor, reHeater3, reHeater4,
-                             reTempTable4, reTempTable7)
+from configtool.data import (
+    defineValueFormat,
+    defineBoolFormat,
+    defineHeaterFormat,
+    reHelpTextStart,
+    reHelpTextEnd,
+    reStartSensors,
+    reEndSensors,
+    reStartHeaters,
+    reEndHeaters,
+    reCandHeatPins,
+    reCandThermPins,
+    reCandProcessors,
+    reCandCPUClocks,
+    reFloatAttr,
+    reDefine,
+    reDefineBL,
+    reDefQS,
+    reDefQSm,
+    reDefQSm2,
+    reDefBool,
+    reDefBoolBL,
+    reDefHT,
+    reDefTS,
+    reDefTT,
+    reSensor,
+    reHeater3,
+    reHeater4,
+    reTempTable4,
+    reTempTable7,
+)
 from configtool.pinoutspage import PinoutsPage
 from configtool.displaypage import DisplayPage
 from configtool.sensorpage import SensorsPage
@@ -45,8 +65,7 @@ class BoardPanel(wx.Panel):
         self.Bind(wx.EVT_PAINT, self.deco.onPaintBackground)
         sz = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.nb = wx.Notebook(self, wx.ID_ANY, size=(21, 21),
-                              style=wx.BK_DEFAULT)
+        self.nb = wx.Notebook(self, wx.ID_ANY, size=(21, 21), style=wx.BK_DEFAULT)
         self.nb.SetBackgroundColour(self.deco.getBackgroundColour())
         self.nb.SetFont(self.settings.font)
 
@@ -59,10 +78,10 @@ class BoardPanel(wx.Panel):
         self.pgPins = self.registerPage(PinoutsPage, "Pinouts")
         self.pgDisplay = self.registerPage(DisplayPage, "Display")
         self.pgHeaters = self.registerPage(HeatersPage, "Heaters")
-        self.pgSensors = self.registerPage(SensorsPage, "Temperature Sensors",
-                                           heatersPage=self.pgHeaters)
-        self.pgCommunications = self.registerPage(CommunicationsPage,
-                                                  "Communications")
+        self.pgSensors = self.registerPage(
+            SensorsPage, "Temperature Sensors", heatersPage=self.pgHeaters
+        )
+        self.pgCommunications = self.registerPage(CommunicationsPage, "Communications")
 
         sz.Add(self.nb, 1, wx.EXPAND + wx.ALL, 5)
 
@@ -70,8 +89,9 @@ class BoardPanel(wx.Panel):
         self.Fit()
 
     def registerPage(self, klass, label, *args, **kwargs):
-        page = klass(self, self.nb, len(self.pages), *args,
-                     font=self.settings.font, **kwargs)
+        page = klass(
+            self, self.nb, len(self.pages), *args, font=self.settings.font, **kwargs
+        )
         self.nb.AddPage(page, label)
         self.pages.append(page)
         self.titles.append(label)
@@ -87,7 +107,7 @@ class BoardPanel(wx.Panel):
         self.modifyTab(pg)
 
     def isModified(self):
-        return (True in self.pageModified)
+        return True in self.pageModified
 
     def isValid(self):
         return not (False in self.pageValid)
@@ -141,11 +161,14 @@ class BoardPanel(wx.Panel):
         if True not in self.pageModified:
             return True
 
-        dlg = wx.MessageDialog(self, "Are you sure you want to " + msg + "?\n"
-                                     "There are changes to your board "
-                                     "configuration that will be lost.",
-                               "Changes pending",
-                               wx.YES_NO | wx.NO_DEFAULT | wx.ICON_INFORMATION)
+        dlg = wx.MessageDialog(
+            self,
+            "Are you sure you want to " + msg + "?\n"
+            "There are changes to your board "
+            "configuration that will be lost.",
+            "Changes pending",
+            wx.YES_NO | wx.NO_DEFAULT | wx.ICON_INFORMATION,
+        )
         rc = dlg.ShowModal()
         dlg.Destroy()
 
@@ -155,8 +178,7 @@ class BoardPanel(wx.Panel):
         return True
 
     def onLoadConfig(self, evt):
-        if not self.confirmLoseChanges(
-                "load a new board configuration"):
+        if not self.confirmLoseChanges("load a new board configuration"):
             return
 
         if platform.startswith("darwin"):
@@ -166,9 +188,13 @@ class BoardPanel(wx.Panel):
             wildcard = "Board configuration (board.*.h)|board.*.h"
 
         dlg = wx.FileDialog(
-            self, message="Choose a board config file",
-            defaultDir=self.dir, defaultFile="",
-            wildcard=wildcard, style=wx.FD_OPEN | wx.FD_CHANGE_DIR)
+            self,
+            message="Choose a board config file",
+            defaultDir=self.dir,
+            defaultFile="",
+            wildcard=wildcard,
+            style=wx.FD_OPEN | wx.FD_CHANGE_DIR,
+        )
 
         path = None
         if dlg.ShowModal() == wx.ID_OK:
@@ -182,8 +208,12 @@ class BoardPanel(wx.Panel):
         rc, efn = self.loadConfigFile(path)
 
         if not rc:
-            dlg = wx.MessageDialog(self, "Unable to process file %s." % efn,
-                                   "File error", wx.OK + wx.ICON_ERROR)
+            dlg = wx.MessageDialog(
+                self,
+                "Unable to process file %s." % efn,
+                "File error",
+                wx.OK + wx.ICON_ERROR,
+            )
             dlg.ShowModal()
             dlg.Destroy()
             return
@@ -226,9 +256,14 @@ class BoardPanel(wx.Panel):
         else:
             wildcard = "Board configuration (board.*.h)|board.*.h"
 
-        dlg = wx.FileDialog(self, message="Save as ...", defaultDir=self.dir,
-                            defaultFile="", wildcard=wildcard,
-                            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+        dlg = wx.FileDialog(
+            self,
+            message="Save as ...",
+            defaultDir=self.dir,
+            defaultFile="",
+            wildcard=wildcard,
+            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
+        )
 
         val = dlg.ShowModal()
 
@@ -249,18 +284,23 @@ class BoardPanel(wx.Panel):
     def saveConfigFile(self, path):
         if os.path.basename(path) in protectedFiles:
             dlg = wx.MessageDialog(
-                self, "It's not allowed to overwrite files "
+                self,
+                "It's not allowed to overwrite files "
                 "distributed by Teacup. Choose another name.",
-                "Protected file error", wx.OK + wx.ICON_ERROR)
+                "Protected file error",
+                wx.OK + wx.ICON_ERROR,
+            )
             dlg.ShowModal()
             dlg.Destroy()
             return False
 
         if not os.path.basename(path).startswith("board."):
             dlg = wx.MessageDialog(
-                self, "Illegal file name: %s.\n"
-                "File name must begin with \"board.\"" % path,
-                "Illegal file name", wx.OK + wx.ICON_ERROR)
+                self,
+                "Illegal file name: %s.\n" 'File name must begin with "board."' % path,
+                "Illegal file name",
+                wx.OK + wx.ICON_ERROR,
+            )
             dlg.ShowModal()
             dlg.Destroy()
             return False
@@ -270,6 +310,7 @@ class BoardPanel(wx.Panel):
             v1 = pg.getValues()
             for k in v1.keys():
                 values[k] = v1[k]
+
         ext = os.path.splitext(os.path.basename(path))[1]
         self.dir = os.path.dirname(path)
 
@@ -279,8 +320,12 @@ class BoardPanel(wx.Panel):
         try:
             self.board.saveConfigFile(path, values)
         except:
-            dlg = wx.MessageDialog(self, "Unable to write to file %s." % path,
-                                   "File error", wx.OK + wx.ICON_ERROR)
+            dlg = wx.MessageDialog(
+                self,
+                "Unable to write to file %s." % path,
+                "File error",
+                wx.OK + wx.ICON_ERROR,
+            )
             dlg.ShowModal()
             dlg.Destroy()
             return False
@@ -288,11 +333,13 @@ class BoardPanel(wx.Panel):
         return self.generateTempTables()
 
     def generateTempTables(self):
-
         if not generateTempTables(self.board.sensors, self.settings):
             dlg = wx.MessageDialog(
-                self, "Error writing to file thermistortable.h.",
-                "File error", wx.OK + wx.ICON_ERROR)
+                self,
+                "Error writing to file thermistortable.h.",
+                "File error",
+                wx.OK + wx.ICON_ERROR,
+            )
             dlg.ShowModal()
             dlg.Destroy()
             return False

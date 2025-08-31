@@ -1,14 +1,22 @@
-
 import os
 import wx
 import re
 
 from sys import platform
 from configtool.decoration import Decoration
-from configtool.data import (defineValueFormat, defineBoolFormat,
-                             reHelpTextStart, reHelpTextEnd,
-                             reDefine, reDefineBL, reDefQS, reDefQSm,
-                             reDefQSm2, reDefBool, reDefBoolBL)
+from configtool.data import (
+    defineValueFormat,
+    defineBoolFormat,
+    reHelpTextStart,
+    reHelpTextEnd,
+    reDefine,
+    reDefineBL,
+    reDefQS,
+    reDefQSm,
+    reDefQSm2,
+    reDefBool,
+    reDefBoolBL,
+)
 from configtool.mechanicalpage import MechanicalPage
 from configtool.accelerationpage import AccelerationPage
 from configtool.miscellaneouspage import MiscellaneousPage
@@ -34,8 +42,7 @@ class PrinterPanel(wx.Panel):
         self.Bind(wx.EVT_PAINT, self.deco.onPaintBackground)
         sz = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.nb = wx.Notebook(self, wx.ID_ANY, size=(21, 21),
-                              style=wx.BK_DEFAULT)
+        self.nb = wx.Notebook(self, wx.ID_ANY, size=(21, 21), style=wx.BK_DEFAULT)
         self.nb.SetBackgroundColour(self.deco.getBackgroundColour())
         self.nb.SetFont(self.settings.font)
 
@@ -46,8 +53,7 @@ class PrinterPanel(wx.Panel):
 
         self.pgMech = self.registerPage(MechanicalPage, "Mechanical")
         self.pgAcc = self.registerPage(AccelerationPage, "Acceleration")
-        self.pgMiscellaneous = self.registerPage(MiscellaneousPage,
-                                                 "Miscellaneous")
+        self.pgMiscellaneous = self.registerPage(MiscellaneousPage, "Miscellaneous")
 
         sz.Add(self.nb, 1, wx.EXPAND + wx.ALL, 5)
 
@@ -55,8 +61,9 @@ class PrinterPanel(wx.Panel):
         self.Fit()
 
     def registerPage(self, klass, label, *args, **kwargs):
-        page = klass(self, self.nb, len(self.pages), *args,
-                     font=self.settings.font, **kwargs)
+        page = klass(
+            self, self.nb, len(self.pages), *args, font=self.settings.font, **kwargs
+        )
         self.nb.AddPage(page, label)
         self.pages.append(page)
         self.titles.append(label)
@@ -69,7 +76,7 @@ class PrinterPanel(wx.Panel):
         self.modifyTab(pg)
 
     def isModified(self):
-        return (True in self.pageModified)
+        return True in self.pageModified
 
     def isValid(self):
         return not (False in self.pageValid)
@@ -123,11 +130,14 @@ class PrinterPanel(wx.Panel):
         if True not in self.pageModified:
             return True
 
-        dlg = wx.MessageDialog(self, "Are you sure you want to " + msg + "?\n"
-                                     "There are changes to your printer "
-                                     "configuration that will be lost.",
-                               "Changes pending",
-                               wx.YES_NO | wx.NO_DEFAULT | wx.ICON_INFORMATION)
+        dlg = wx.MessageDialog(
+            self,
+            "Are you sure you want to " + msg + "?\n"
+            "There are changes to your printer "
+            "configuration that will be lost.",
+            "Changes pending",
+            wx.YES_NO | wx.NO_DEFAULT | wx.ICON_INFORMATION,
+        )
         rc = dlg.ShowModal()
         dlg.Destroy()
 
@@ -147,9 +157,13 @@ class PrinterPanel(wx.Panel):
             wildcard = "Printer configuration (printer.*.h)|printer.*.h"
 
         dlg = wx.FileDialog(
-            self, message="Choose a printer config file",
-            defaultDir=self.dir, defaultFile="",
-            wildcard=wildcard, style=wx.FD_OPEN | wx.FD_CHANGE_DIR)
+            self,
+            message="Choose a printer config file",
+            defaultDir=self.dir,
+            defaultFile="",
+            wildcard=wildcard,
+            style=wx.FD_OPEN | wx.FD_CHANGE_DIR,
+        )
 
         path = None
         if dlg.ShowModal() == wx.ID_OK:
@@ -158,12 +172,17 @@ class PrinterPanel(wx.Panel):
         dlg.Destroy()
         if path is None:
             return
+
         self.dir = os.path.dirname(path)
         rc, efn = self.loadConfigFile(path)
 
         if not rc:
-            dlg = wx.MessageDialog(self, "Unable to process file %s." % efn,
-                                   "File error", wx.OK + wx.ICON_ERROR)
+            dlg = wx.MessageDialog(
+                self,
+                "Unable to process file %s." % efn,
+                "File error",
+                wx.OK + wx.ICON_ERROR,
+            )
             dlg.ShowModal()
             dlg.Destroy()
             return
@@ -179,17 +198,18 @@ class PrinterPanel(wx.Panel):
         else:
             self.protFileLoaded = False
             self.parent.enableSavePrinter(True, True)
+
         self.parent.setPrinterTabFile(os.path.basename(fn))
+        self.pgMech.setCandidateHomingOptions(self.printer.candHomingOptions)
+        self.pgMech.setHoming(self.printer.homing)
 
         for pg in self.pages:
             pg.insertValues(self.printer.cfgValues)
             pg.setHelpText(self.printer.helpText)
 
-        k = 'DC_EXTRUDER'
-        if k in self.printer.cfgValues.keys() and self.printer.cfgValues[
-                k][1] is True:
-            self.pgMiscellaneous.setOriginalHeater(
-                self.printer.cfgValues[k][0])
+        k = "DC_EXTRUDER"
+        if k in self.printer.cfgValues.keys() and self.printer.cfgValues[k][1] == True:
+            self.pgMiscellaneous.setOriginalHeater(self.printer.cfgValues[k][0])
         else:
             self.pgMiscellaneous.setOriginalHeater(None)
 
@@ -206,9 +226,14 @@ class PrinterPanel(wx.Panel):
         else:
             wildcard = "Printer configuration (printer.*.h)|printer.*.h"
 
-        dlg = wx.FileDialog(self, message="Save as ...", defaultDir=self.dir,
-                            defaultFile="", wildcard=wildcard,
-                            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+        dlg = wx.FileDialog(
+            self,
+            message="Save as ...",
+            defaultDir=self.dir,
+            defaultFile="",
+            wildcard=wildcard,
+            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
+        )
 
         val = dlg.ShowModal()
 
@@ -229,18 +254,24 @@ class PrinterPanel(wx.Panel):
     def saveConfigFile(self, path):
         if os.path.basename(path) in protectedFiles:
             dlg = wx.MessageDialog(
-                self, "It's not allowed to overwrite files "
+                self,
+                "It's not allowed to overwrite files "
                 "distributed by Teacup. Choose another name.",
-                "Protected file error", wx.OK + wx.ICON_ERROR)
+                "Protected file error",
+                wx.OK + wx.ICON_ERROR,
+            )
             dlg.ShowModal()
             dlg.Destroy()
             return False
 
         if not os.path.basename(path).startswith("printer."):
             dlg = wx.MessageDialog(
-                self, "Illegal file name: %s.\n"
-                "File name must begin with \"printer.\"" % path,
-                "Illegal file name", wx.OK + wx.ICON_ERROR)
+                self,
+                "Illegal file name: %s.\n"
+                'File name must begin with "printer."' % path,
+                "Illegal file name",
+                wx.OK + wx.ICON_ERROR,
+            )
             dlg.ShowModal()
             dlg.Destroy()
             return False
@@ -260,8 +291,12 @@ class PrinterPanel(wx.Panel):
         try:
             self.printer.saveConfigFile(path, values)
         except:
-            dlg = wx.MessageDialog(self, "Unable to write to file %s." % path,
-                                   "File error", wx.OK + wx.ICON_ERROR)
+            dlg = wx.MessageDialog(
+                self,
+                "Unable to write to file %s." % path,
+                "File error",
+                wx.OK + wx.ICON_ERROR,
+            )
             dlg.ShowModal()
             dlg.Destroy()
             return False

@@ -1,4 +1,3 @@
-
 import wx
 from configtool.page import Page
 
@@ -9,27 +8,29 @@ class CommunicationsPage(wx.Panel, Page):
         Page.__init__(self, font)
         self.parent = parent
         self.id = idPg
-        self.defaultBaud = '115200'
+        self.defaultBaud = "115200"
 
-        self.bauds = ['19200', '38400', '57600', '115200', '230400', '250000']
+        self.bauds = ["19200", "38400", "57600", "115200", "230400", "250000"]
 
         self.labels = {
-            'XONXOFF': "XON/XOFF Flow Control", 'BAUD': "Baud Rate:",
-            'USB_SERIAL': "USB Serial"}
+            "XONXOFF": "XON/XOFF Flow Control",
+            "BAUD": "Baud Rate:",
+            "USB_SERIAL": "USB Serial",
+        }
 
         sz = wx.GridBagSizer()
         sz.Add((20, 40), pos=(0, 0))
 
-        k = 'USB_SERIAL'
+        k = "USB_SERIAL"
         cb = self.addCheckBox(k, self.onUSBCheckBox)
         sz.Add(cb, pos=(1, 1))
 
         ch = self.addChoice(
-            'BAUD', self.bauds, self.bauds.index(self.defaultBaud),
-            80, self.onChoice)
+            "BAUD", self.bauds, self.bauds.index(self.defaultBaud), 80, self.onChoice
+        )
         sz.Add(ch, pos=(1, 3))
 
-        cb = self.addCheckBox('XONXOFF', self.onCheckBox)
+        cb = self.addCheckBox("XONXOFF", self.onCheckBox)
         sz.Add(cb, pos=(3, 3))
 
         sz.Add((100, 10), pos=(2, 2))
@@ -39,26 +40,26 @@ class CommunicationsPage(wx.Panel, Page):
 
     def onUSBCheckBox(self, evt):
         self.assertModified(True)
-        f = not self.checkBoxes['USB_SERIAL'].IsChecked()
-        self.checkBoxes['XONXOFF'].Enable(f)
-        self.choices['BAUD'].Enable(f)
+        f = not self.checkBoxes["USB_SERIAL"].IsChecked()
+        self.checkBoxes["XONXOFF"].Enable(f)
+        self.choices["BAUD"].Enable(f)
         evt.Skip()
 
     def insertValues(self, cfgValues):
         Page.insertValues(self, cfgValues)
 
-        k = 'BAUD'
+        k = "BAUD"
         self.setChoice(k, cfgValues, self.defaultBaud)
 
-        if self.checkBoxes['USB_SERIAL'].IsChecked():
-            self.checkBoxes['XONXOFF'].Enable(False)
-            self.choices['BAUD'].Enable(False)
+        if self.checkBoxes["USB_SERIAL"].IsChecked():
+            self.checkBoxes["XONXOFF"].Enable(False)
+            self.choices["BAUD"].Enable(False)
 
     def getValues(self):
         result = Page.getValues(self)
 
-        if result['USB_SERIAL']:
-            result['BAUD'] = result['BAUD'][0], False
-            result['XONXOFF'] = False
+        if result["USB_SERIAL"]:
+            result["BAUD"] = result["BAUD"][0], False
+            result["XONXOFF"] = False
 
         return result
