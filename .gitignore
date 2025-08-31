@@ -4,6 +4,10 @@
 build
 *~
 
+.vscode/*
+old/*
+
+
 private/
 temporal.png
 temporal_data
