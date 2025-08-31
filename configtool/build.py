@@ -371,12 +371,12 @@ class Build(wx.Dialog):
         )
 
     def formatReport(self):
-        reText = re.compile("\.text\s+([0-9a-f]+)")
-        reBss = re.compile("\.bss\s+([0-9a-f]+)")
-        reEEProm = re.compile("\.eeprom\s+([0-9a-f]+)")
+        reText = re.compile(r"\.text\s+([0-9a-f]+)")
+        reBss = re.compile(r"\.bss\s+([0-9a-f]+)")
+        reEEProm = re.compile(r"\.eeprom\s+([0-9a-f]+)")
 
         self.log.AppendText(
-            "\n                   ATmega...     '168   '328(P)" "   '644(P)     '1280\n"
+            r"\n                   ATmega...     '168   '328(P)" "   '644(P)     '1280\n"
         )
         for l in self.reportLines:
             m = reText.search(l)

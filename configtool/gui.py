@@ -69,6 +69,7 @@ class ConfigFrame(wx.Frame):
         self.protPrtFile = False
         self.protBrdFile = False
 
+        # Create a sizer for the panel
         sz = wx.BoxSizer(wx.HORIZONTAL)
 
         self.nb = wx.Notebook(panel, wx.ID_ANY, size=(880, 550), style=wx.BK_DEFAULT)
@@ -87,10 +88,14 @@ class ConfigFrame(wx.Frame):
         self.pgBoard = BoardPanel(self, self.nb, self.settings)
         self.nb.AddPage(self.pgBoard, self.boardBaseText)
 
+        sz.Add(self.nb, 1, wx.EXPAND | wx.ALL, 5)
+        panel.SetSizer(sz)
         panel.Fit()
         self.panel = panel
 
-        sz.Add(self.nb, 1, wx.EXPAND + wx.ALL, 5)
+        # Now add the panel to the frame's sizer
+        sz = wx.BoxSizer(wx.HORIZONTAL)
+        sz.Add(panel, 1, wx.EXPAND)
         self.SetSizer(sz)
         self.makeMenu()
 

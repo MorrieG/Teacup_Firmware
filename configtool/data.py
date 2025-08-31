@@ -48,54 +48,54 @@ else:
 TYPE_GENERAL = 0
 TYPE_FLOAT = 1
 
-reDefQSm = re.compile("\s*#define\s+(\S+)\s+(.*)")
-reDefQSm2 = re.compile('\s*("[^"]*")')
+reDefQSm = re.compile(r"\s*#define\s+(\S+)\s+(.*)")
+reDefQSm2 = re.compile(r'\s*("[^"]*")')
 
-reInclude = re.compile('^\s*#include\s+"([^"]*)')
-reFloatAttr = re.compile("/\*\s*float\s*\*/")
-reDefine = re.compile("\s*#define\s+(\w+)\s+(\S+)")
-reDefineBL = re.compile("^\s*#define\s+(\w+)\s+(\S+)")
-reDefQS = re.compile('\s*#define\s+(\w+)\s+("[^"]*")')
-reDefTS = re.compile("\s*(DEFINE_TEMP_SENSOR\\([^)]*\\))")
-reDefHT = re.compile("\s*(DEFINE_HEATER\\([^)]*\\))")
-reDefTT = re.compile("^\s*//\s*TEMP_TABLE\s+(\S+)\s+(\\(.*\\))")
-reDefBool = re.compile("\s*#define\s+(\w+)\s+")
-reDefBoolBL = re.compile("^\s*#define\s+(\w+)\s+")
-reStartSensors = re.compile("^\s*//\s*DEFINE_TEMP_SENSORS_START")
-reEndSensors = re.compile("^\s*//\s*DEFINE_TEMP_SENSORS_END")
-reStartHeaters = re.compile("^\s*//\s*DEFINE_HEATERS_START")
-reEndHeaters = re.compile("^\s*//\s*DEFINE_HEATERS_END")
-reCandHeatPins = re.compile("^\s*//\s*#define\s+HEATER_PIN\s+(\w+)")
-reCandThermPins = re.compile("^\s*//\s*#define\s+TEMP_SENSOR_PIN\s+(\w+)")
-reCandProcessors = re.compile("^\s*//\s*#define\s+CPU_TYPE\s+(\w+)")
-reCandCPUClocks = re.compile("^\s*//\s*#define\s+F_CPU_OPT\s+(\w+)")
+reInclude = re.compile(r'^\s*#include\s+"([^"]*)')
+reFloatAttr = re.compile(r"/\*\s*float\s*\*/")
+reDefine = re.compile(r"\s*#define\s+(\w+)\s+(\S+)")
+reDefineBL = re.compile(r"^\s*#define\s+(\w+)\s+(\S+)")
+reDefQS = re.compile(r'\s*#define\s+(\w+)\s+("[^"]*")')
+reDefTS = re.compile(r"\s*(DEFINE_TEMP_SENSOR\\([^)]*\\))")
+reDefHT = re.compile(r"\s*(DEFINE_HEATER\\([^)]*\\))")
+reDefTT = re.compile(r"^\s*//\s*TEMP_TABLE\s+(\S+)\s+(\\(.*\\))")
+reDefBool = re.compile(r"\s*#define\s+(\w+)\s+")
+reDefBoolBL = re.compile(r"^\s*#define\s+(\w+)\s+")
+reStartSensors = re.compile(r"^\s*//\s*DEFINE_TEMP_SENSORS_START")
+reEndSensors = re.compile(r"^\s*//\s*DEFINE_TEMP_SENSORS_END")
+reStartHeaters = re.compile(r"^\s*//\s*DEFINE_HEATERS_START")
+reEndHeaters = re.compile(r"^\s*//\s*DEFINE_HEATERS_END")
+reCandHeatPins = re.compile(r"^\s*//\s*#define\s+HEATER_PIN\s+(\w+)")
+reCandThermPins = re.compile(r"^\s*//\s*#define\s+TEMP_SENSOR_PIN\s+(\w+)")
+reCandProcessors = re.compile(r"^\s*//\s*#define\s+CPU_TYPE\s+(\w+)")
+reCandCPUClocks = re.compile(r"^\s*//\s*#define\s+F_CPU_OPT\s+(\w+)")
 
-reHelpTextStart = re.compile("^\s*/\*\*\s+\\\\def\s+(.*)")
-reHelpTextEnd = re.compile("^\s*\*/")
-reHelpText = re.compile("/\*\*.*?\*/\r?\n", re.DOTALL)
+reHelpTextStart = re.compile(r"^\s*/\*\*\s+\\\\def\s+(.*)")
+reHelpTextEnd = re.compile(r"^\s*\*/")
+reHelpText = re.compile(r"/\*\*.*?\*/\r?\n", re.DOTALL)
 
-reSensor = re.compile(".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)")
+reSensor = re.compile(r".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)")
 # reHeater3 and reHeater4 deprecated, for compatibility with old config files only.
-reHeater3 = re.compile(".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)")
-reHeater4 = re.compile(".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)")
+reHeater3 = re.compile(r".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)")
+reHeater4 = re.compile(r".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)")
 reHeater5 = re.compile(
-    ".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)"
+    r".*\\(\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*\\)"
 )
 reTempTable4 = re.compile(
-    ".*\\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d*.?\d*)\s*\\)"
+    r".*\\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d*.?\d*)\s*\\)"
 )
 reTempTable7 = re.compile(
-    ".*\\(\s*(\d+)\s*,\s*(\d*.?\d*)\s*,\s*(\d+)\s*,\s*(\d*.?\d*)\s*,\s*(\d+)\s*,\s*(\d*.?\d*)\s*,\s*(\d+)\s*\\)"
+    r".*\\(\s*(\d+)\s*,\s*(\d*.?\d*)\s*,\s*(\d+)\s*,\s*(\d*.?\d*)\s*,\s*(\d+)\s*,\s*(\d*.?\d*)\s*,\s*(\d+)\s*\\)"
 )
 
-reInteger = re.compile("^\d+U?L?$")
-reFloat = re.compile("^\d+(\.\d*)?$")
+reInteger = re.compile(r"^\d+U?L?$")
+reFloat = re.compile(r"^\d+(\.\d*)?$")
 
 defineValueFormat = "#define %-24s %s\n"
 defineBoolFormat = "#define %s\n"
 defineHeaterFormat = "#define HEATER_%s HEATER_%s\n"
 defineDCExtruderFormat = "#define %-24s HEATER_%s\n"
 
-reCandHomingOptions = re.compile("^\s*//\s*#define\s+HOMING_OPT\s+(\w+)")
+reCandHomingOptions = re.compile(r"^\s*//\s*#define\s+HOMING_OPT\s+(\w+)")
 reDefHoming = re.compile(r"\s*(DEFINE_HOMING\([^)]*\))")
 reHoming = re.compile(r".*?\W(\w+)")
