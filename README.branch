@@ -1,0 +1,20 @@
+# About This Branch
+
+This branch of the Teacup_Firmware fork is maintained by MorrieG for personal learning purposes. Its primary goal is to help me understand how RepRap firmware works and to provide insights into C++ coding.
+
+**Warning:** The code in this branch is experimental and should not be relied upon for any purpose, including production or safety-critical use.
+
+## License
+This branch retains the original project's LICENSE file. All changes and additions are subject to the original license terms. See the LICENSE file for details.
+
+## File Modifications
+Where significant changes are made, a header comment is added to the top of the file, e.g.:
+
+```c
+// Modified by MorrieG for personal learning, 2025.
+// See README.branch for details. Original license applies.
+```
+
+## Original Documentation
+The original README and documentation files are retained for reference.
+DEFINE_HOMING

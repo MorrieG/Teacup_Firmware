@@ -1,3 +1,6 @@
+# Modified by MorrieG for personal learning, 2025.
+# See README.branch for details. Original license applies.
+
 from __future__ import print_function
 
 import sys
