@@ -683,7 +683,7 @@ class ConfigFrame(wx.Frame):
             "    Jim McGee  (15 commits)\n"
             "    Ben Jackson  (12 commits)\n"
             "    Robert Konklewski  (12 commits)\n"
-            "About Teacup",
+            ,"About Teacup",
             style=wx.OK,
         )
 
