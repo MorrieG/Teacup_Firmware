@@ -45,13 +45,13 @@
 *                                                                           *
 \***************************************************************************/
 
-#define TX_ENABLE_PIN            DIO12
-#define RX_ENABLE_PIN            DIO13
+//#define TX_ENABLE_PIN            xxxx
+//#define RX_ENABLE_PIN            xxxx
 
 #define X_STEP_PIN               DIO2
 #define X_DIR_PIN                DIO5
 #define X_MIN_PIN                DIO9
-#define X_MAX_PIN                DIO14
+//#define X_MAX_PIN                DIO21
 #define X_ENABLE_PIN             DIO8
 //#define X_INVERT_DIR
 //#define X_INVERT_MIN
@@ -61,7 +61,7 @@
 #define Y_STEP_PIN               DIO3
 #define Y_DIR_PIN                DIO6
 #define Y_MIN_PIN                DIO10
-#define Y_MAX_PIN                DIO15
+//#define Y_MAX_PIN                DIO26
 #define Y_ENABLE_PIN             DIO8
 //#define Y_INVERT_DIR
 //#define Y_INVERT_MIN
@@ -71,7 +71,7 @@
 #define Z_STEP_PIN               DIO4
 #define Z_DIR_PIN                DIO7
 #define Z_MIN_PIN                DIO11
-#define Z_MAX_PIN                DIO16
+//#define Z_MAX_PIN                DIO31
 #define Z_ENABLE_PIN             DIO8
 //#define Z_INVERT_DIR
 //#define Z_INVERT_MIN
@@ -88,7 +88,7 @@
 //#define PS_INVERT_ON
 //#define PS_MOSFET_PIN            xxxx
 #define STEPPER_ENABLE_PIN       DIO8
-//#define STEPPER_INVERT_ENABLE
+#define STEPPER_INVERT_ENABLE
 
 /** \def DEBUG_LED_PIN
 
@@ -243,8 +243,9 @@ DEFINE_TEMP_SENSOR(extruder, TT_THERMISTOR, AIO3,  THERMISTOR_EXTRUDER)
 */
 
 //DEFINE_HEATERS_START
-//            name      pin      invert  pwm     max_pwm
-DEFINE_HEATER(extruder, AIO2,    0,      1,     100)
+
+//            name      pin      invert  pwm      max_pwm
+DEFINE_HEATER(extruder, AIO2,    0,      1,       100)
 
 #define HEATER_EXTRUDER HEATER_extruder
 //DEFINE_HEATERS_END
